@@ -1,0 +1,9 @@
+{
+  "name": "tree-sitter-gams",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for the GAMS modeling language",
+  "main": "grammar.js",
+  "keywords": ["tree-sitter", "gams", "parser", "modeling", "optimization"],
+  "author": "Your Name",
+  "license": "Apache 2.0"
+}
