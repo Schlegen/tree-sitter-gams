@@ -16,7 +16,6 @@ module.exports = grammar({
       $.scalar_declaration,
       $.variable_declaration,
       $.equation_declaration,
-      $.macro_declaration,
 
       // other
       $.comment,
@@ -182,32 +181,42 @@ module.exports = grammar({
 
 
     // equation declaration
-    equation_declaration: $ => seq(choice(caseInsensitive('Equation'), caseInsensitive('Equations')),
-                $.identifier,
-                optional($.betweenParenthesis),
-                optional($.betweenSlashes),
-                ';'),
 
-    macro_declaration: $ => seq(
-      '$macro',
-      $.identifier,
-      $.macroExpression
+    equation_declaration: $ => seq(
+      choice(
+        caseInsensitive('equation'),
+        caseInsensitive('equations')
+      ),
+      commaOrNewlineSep1($.eq_entry),
+      ';'
     ),
 
-    macroExpression: $ => repeat1(choice(
-      /[^\\\n]+/,
-      '\\\n'
-    )),
+    eq_entry: $ => seq(
+      choice(
+        $.identifier,                      // eq_name
+        $.identifier_with_domain
+      ),
+      optional($.string),                // ["text"]
+      optional($.eq_data_block)         // [/ ... /]
+    ),
 
-    // assignment
-    // assignment: $ => seq(choice($.identifier, $.identifierFolowedByParenthesis)
-    //           , '=', $.expression, ';'),
+    eq_data_block: $ => seq(
+      '/',
+      commaOrNewlineSep1($.eq_attr_assignment),
+      '/'
+    ),
 
-    // expression: $ => token(/[^;]+/),
+    // j1.up 10    i1.j2.lo 5     k.m 0    a.scale 20
+    eq_attr_assignment: $ => seq(
+      $.index_atom,
+      token.immediate('.'),        // no space between element and dot attribute
+      $.eq_attr,
+      field('value', $.number)
+    ),
 
+    eq_attr: $ => token(/(up|lo|l|m|scale)/i),
 
-
-    // utils
+    // Other utils
 
     identifierFolowedByParenthesis : $ =>
         seq(
