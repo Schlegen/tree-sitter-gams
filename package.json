@@ -4,6 +4,6 @@
   "description": "Tree-sitter grammar for the GAMS modeling language",
   "main": "grammar.js",
   "keywords": ["tree-sitter", "gams", "parser", "modeling", "optimization"],
-  "author": "Your Name",
+  "author": "Nicolas Schlegel",
   "license": "Apache 2.0"
 }
