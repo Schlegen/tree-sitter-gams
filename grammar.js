@@ -23,7 +23,6 @@ module.exports = grammar({
     ),
 
     // utils
-
     identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
     set_element: $ => /[a-zA-Z_][a-zA-Z0-9_\-]*/,
     set_element_selection: $ => choice(
@@ -44,6 +43,11 @@ module.exports = grammar({
     number: $ => /[+-]?(?:\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/,
 
     comment: $ => token(seq('#', /.*/)),
+
+    string: $ => choice(
+      seq('"', repeat(choice(/[^"]/)), '"'),
+      seq("'", repeat(choice(/[^']/)), "'"))
+    },
 
     // set declaration
     set_declaration: $ => seq(
@@ -217,12 +221,8 @@ module.exports = grammar({
     eq_attr: $ => token(/(up|lo|l|m|scale)/i),
     
     // variable description in strings
-    string: $ => choice(
-      seq('"', repeat(choice(/[^"]/)), '"'),
-      seq("'", repeat(choice(/[^']/)), "'"))
-    },
 
-    // commaSep1: rule => seq(rule, repeat(seq(',', rule))),
+
 });
 
 // separate one or more term by comma or newline
