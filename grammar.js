@@ -215,41 +215,6 @@ module.exports = grammar({
     ),
 
     eq_attr: $ => token(/(up|lo|l|m|scale)/i),
-
-    // Other utils
-
-    identifierFolowedByParenthesis : $ =>
-        seq(
-          $.identifier,
-          $.betweenParenthesis
-        )
-    ,
-
-    // parenthesis
-    _findable_in_parenthesis : $ => choice(
-      $.identifier,
-      $.betweenParenthesis,
-      $.identifierFolowedByParenthesis
-    ),
-
-    betweenParenthesis: $ => seq(
-      '(', 
-        $._findable_in_parenthesis,
-        repeat(seq(',', $._findable_in_parenthesis)), 
-      ')'),
-
-    // value definition with "/"
-    _findable_in_slashes : $ => choice(
-      $.identifier,
-    ),
-
-    betweenSlashes: $ => seq(
-      '/', 
-        $._findable_in_slashes,
-        optional(
-          seq(',', $._findable_in_slashes)
-        ), 
-      '/'),
     
     // variable description in strings
     string: $ => choice(
