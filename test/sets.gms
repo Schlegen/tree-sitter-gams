@@ -12,3 +12,5 @@ sets k "set k"
 
 Set row / row1*row10 /
     col / col1*col10 /;
+
+Set test /1*10/;

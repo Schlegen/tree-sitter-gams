@@ -12,6 +12,7 @@ module.exports = grammar({
     _statement: $ => choice(
       // declaration
       $.set_declaration,
+      $.alias_declaration,
       $.parameter_declaration,
       $.scalar_declaration,
       $.variable_declaration,
@@ -46,8 +47,8 @@ module.exports = grammar({
 
     string: $ => choice(
       seq('"', repeat(choice(/[^"]/)), '"'),
-      seq("'", repeat(choice(/[^']/)), "'"))
-    },
+      seq("'", repeat(choice(/[^']/)), "'")
+    ),
 
     // set declaration
     set_declaration: $ => seq(
@@ -66,14 +67,29 @@ module.exports = grammar({
     ),
 
     element_block: $ => seq(
-      '/',
-      commaOrNewlineSep1($.element_entry), 
-      '/'
+        '/',
+        choice(
+          commaOrNewlineSep1($.element_entry),
+          seq($.identifier, '*', $.identifier),
+          seq($.number, '*', $.number) 
+        ),
+        '/'
     ),
 
     element_entry: $ => seq(
       $.identifier,
       optional($.string)           
+    ),
+
+    // subset
+
+    // alias
+    alias_declaration: $ => seq(
+      caseInsensitive('alias'),
+      '(',
+      commaSep1($.identifier), // aliases
+      ')',
+      ';'
     ),
 
     // scalar declaration
@@ -220,9 +236,13 @@ module.exports = grammar({
 
     eq_attr: $ => token(/(up|lo|l|m|scale)/i),
     
-    // variable description in strings
+    // instantiation
 
 
+
+    // loops
+
+  }
 });
 
 // separate one or more term by comma or newline
