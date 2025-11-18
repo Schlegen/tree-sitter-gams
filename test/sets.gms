@@ -14,3 +14,7 @@ Set row / row1*row10 /
     col / col1*col10 /;
 
 Set test /1*10/;
+
+Alias (c, cp) ;
+Alias (cp, c) ;
+alias (c,cp, cpp, cppp);
