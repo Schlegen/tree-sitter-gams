@@ -1,7 +1,54 @@
+# Simple scalar assignments
 a1 = 10;
 a2 = 5;
-cc(j) = bc(j)+10;
+a3 = -7.5;
+a4 = 3.1415;
+a5 = 2e3;
 
+# Parameter assignments with index
+cc(j) = bc(j) + 10;
+dd(j,k) = aa(j)*bb(k);
+
+# String indices
 cc("j1") = 1;
+ee("region1","year2025") = 1000;
 
-cc(is_valid(j)) $ is_prime(j) = bc(j)+10;
+# Conditional assignments
+cc(is_valid(j)) $ is_prime(j) = bc(j) + 10;
+ff(j) $ (j > 0) = dd(j); # 2
+gg(i,j) $ (i < j) = ii(i,j) - 5;
+
+# Indexed references with ranges
+hh(i)*hh(k) = 0;
+ii(1*5,2*7) = jj(1*5,2*7) + 1;
+
+# Mixed scalar and indexed assignments
+calar1 = 100;
+param1(j) = 2*cc(j);
+# param2(i,j) $ (i.j mod 2 = 0) = 1.5*param1(i);
+
+# Nested functions in indices
+kk(sum(l) $ condition(l)) = ll(l) + 5;
+mm(prod(i) $ (i.val > 0)) = nn(i)*10;
+
+# Assignments with complex expressions
+pp(j) = qq(j) + rr(j)*2 - ss(j)/3 + tt(j)**2;
+
+# Assignments with immediate strings
+uu("some_key") = 42;
+vv("another_key") = uu("some_key") + 3;
+
+# Multi-line assignment
+# ww(j) 
+# / 
+#    "j1" 100,
+#    "j2" 200,
+#    "j3" 300
+# /;
+
+# Conditional with multi-line index set
+# xx(j) $ is_valid(j) 
+# / 
+#    "j1" 10,
+#    "j3" 20
+# /;

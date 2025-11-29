@@ -6,21 +6,31 @@ module.exports = grammar({
     $.comment
   ],
 
+  word: $ => $.identifier,
+
   rules: {
-    source_file: $ => repeat($._statement),
+    source_file: $ => repeat(
+      choice(
+        $._declaration,
+        $._statement
+      )
+    ),
+
+    _declaration: $ => choice(
+      prec(10, $.set_declaration),
+      prec(9, $.parameter_declaration),
+      prec(9, $.scalar_declaration),
+      prec(9, $.variable_declaration),
+      prec(9, $.equation_declaration),
+    ),
 
     _statement: $ => choice(
-      // declaration
-      $.set_declaration,
       $.alias_declaration,
-      $.parameter_declaration,
-      $.scalar_declaration,
-      $.variable_declaration,
-      $.equation_declaration,
+      prec(1, $.assignment_statement),
 
       // other
       $.comment,
-      $.string
+      // $.string
     ),
 
     // utils
@@ -31,36 +41,107 @@ module.exports = grammar({
       seq(
         token("("), commaSep1($.set_element), token(")")
       ),
-      seq($.set_element, "*", $.set_element)
+      seq($.set_element, "*", $.set_element),
+      seq($.number, "*", $.number)
     ),
 
-    identifier_with_domain: $ => seq(
-      $.identifier,
-      token.immediate('('),
-      commaSep1($.identifier),
-      ')'
-    ),
+    identifier_with_domain: $ =>
+      prec(3,
+      seq(
+        $.identifier,
+        token.immediate('('),
+        $.identifier_with_domain_args,
+        ')'
+      )
+   ),
+
+    identifier_with_domain_args: $ =>
+      seq(
+        $.identifier,
+        optional(
+          prec(3, repeat(seq(',', $.identifier)))
+        )
+      ),
+
+
+    indexed_reference: $ => 
+      prec(2,
+        seq(
+          $.identifier,
+          optional(
+            seq(
+              token.immediate('.'),
+              $.variable_attribute_keyword
+            )
+          ),
+          token.immediate('('),
+          $.indexed_reference_args,
+          ')'
+        )
+      ),
+
+    indexed_reference_args: $ =>
+      seq(
+        choice(
+          $.string,
+          seq($.identifier, '*', $.identifier),
+          seq($.number, '*', $.number),
+          $.identifier_with_domain,
+          $.identifier
+        ),
+        optional(
+          prec(2, repeat(
+            seq(
+            ',',
+            choice(
+              $.string,
+              seq($.identifier, '*', $.identifier),
+              seq($.number, '*', $.number),
+              $.identifier_with_domain,
+             $.identifier,
+            )
+          )
+        )))
+      ),
+
+    variable_attribute_keyword: $ => 
+      choice(
+        token.immediate(caseInsensitive('up')),
+        token.immediate(caseInsensitive('lo')),
+        token.immediate(caseInsensitive('l')),
+        token.immediate(caseInsensitive('fx')),
+        token.immediate(caseInsensitive('scale')),
+        token.immediate(caseInsensitive('m')),
+      ),
+      
 
     number: $ => /[+-]?(?:\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/,
 
     comment: $ => token(seq('#', /.*/)),
 
     string: $ => choice(
-      seq('"', repeat(choice(/[^"]/)), '"'),
-      seq("'", repeat(choice(/[^']/)), "'")
+      seq('"', repeat(/[^"]/), '"'),
+      seq("'", repeat(/[^']/), "'")
     ),
 
     // set declaration
-    set_declaration: $ => seq(
-      choice(caseInsensitive('set'), caseInsensitive('sets')),
+
+    set_keyword: $ => prec(10, choice(
+      token.immediate(caseInsensitive('set')),
+      token.immediate(caseInsensitive('sets'))
+    )),
+
+    set_declaration: $ => prec(10, seq(
+      $.set_keyword,
       commaOrNewlineSep1($.set_entry),
       ';'
+    )
     ),
 
     set_entry: $ => seq(
       choice(
+        $.identifier_with_domain,
         $.identifier,               // set_name
-        $.identifier_with_domain
       ),                
       optional($.string),           // ["text"]
       optional($.element_block)     // [/element [text], .../]
@@ -84,6 +165,11 @@ module.exports = grammar({
     // subset
 
     // alias
+    alias_keyword: $ => prec(9, 
+      token.immediate(caseInsensitive('alias')),
+    ),
+
+
     alias_declaration: $ => seq(
       caseInsensitive('alias'),
       '(',
@@ -92,12 +178,14 @@ module.exports = grammar({
       ';'
     ),
 
+    scalar_keyword: $ => prec(9, choice(
+      token.immediate(caseInsensitive('scalar')),
+      token.immediate(caseInsensitive('scalars'))
+    )),
+
     // scalar declaration
     scalar_declaration: $ => seq(
-      choice(
-        caseInsensitive('scalar'),
-        caseInsensitive('scalars')
-      ),
+      $.scalar_keyword,
       commaOrNewlineSep1($.scalar_entry),
       ';'
     ),
@@ -108,6 +196,7 @@ module.exports = grammar({
       optional($.scalar_value_block) // [/numerical_value/]
     ),
 
+    
     scalar_value_block: $ => seq(
       '/',
       $.number,
@@ -115,22 +204,27 @@ module.exports = grammar({
     ),
 
     // parameter declaration
-    parameter_declaration: $ => seq(
+    parameter_keyword: $ => prec(10,
       choice(
-        caseInsensitive('parameter'),
-        caseInsensitive('parameters')
-      ),
-      commaOrNewlineSep1($.param_entry),
-      ';'
+        token.immediate(caseInsensitive('parameter')),
+        token.immediate(caseInsensitive('parameters')),
+      )
     ),
+
+    parameter_declaration: $ =>
+      seq(
+        $.parameter_keyword,
+        commaOrNewlineSep1($.param_entry),
+        ';'
+      ),
 
     param_entry: $ => seq(
       choice(
-        $.identifier,               // param_name
-        $.identifier_with_domain    // param_name(index_list)
+        $.identifier_with_domain,    // param_name(index_list)
+        $.identifier               // param_name
       ),
       optional($.string),           // ["text"]
-      $.param_data_block            // [/ ... /]
+      optional(seq(/\s*\n\s*/, $.param_data_block))           // [/ ... /]
     ),
 
     param_data_block: $ => seq(
@@ -146,12 +240,14 @@ module.exports = grammar({
     ),
 
     // variable declaration
+    variable_keyword: $ => prec(9, choice(
+      token.immediate(caseInsensitive('variable')),
+      token.immediate(caseInsensitive('variables'))
+    )),
+
     variable_declaration: $ => seq(
       optional($.var_type),
-      choice(
-        caseInsensitive('variable'),
-        caseInsensitive('variables')
-      ),
+      $.variable_keyword,
       commaOrNewlineSep1($.var_entry),
       ';'
     ),
@@ -175,7 +271,7 @@ module.exports = grammar({
     var_attr_assignment: $ => seq(
       $.index_atom,
       token.immediate('.'),        // no space between element and dot attribute
-      $.var_attr,
+      $.variable_attribute_keyword,
       field('value', $.number)
     ),
 
@@ -187,26 +283,29 @@ module.exports = grammar({
 
     var_attr: $ => token(/(up|lo|l|m|scale)/i),
 
-    var_type: $ => choice(
-      caseInsensitive('free'),
-      caseInsensitive('positive'),
-      caseInsensitive('negative'),
-      caseInsensitive('integer'),
-      caseInsensitive('binary'),
-      caseInsensitive('sos1'),
-      caseInsensitive('sos2'),
-      caseInsensitive('semicont'),
-      caseInsensitive('semiint')
+    var_type: $ => prec(9,
+      choice(
+        token.immediate(caseInsensitive('free')),
+        token.immediate(caseInsensitive('positive')),
+        token.immediate(caseInsensitive('negative')),
+        token.immediate(caseInsensitive('integer')),
+        token.immediate(caseInsensitive('binary')),
+        token.immediate(caseInsensitive('sos1')),
+        token.immediate(caseInsensitive('sos2')),
+        token.immediate(caseInsensitive('semicont')),
+        token.immediate(caseInsensitive('semiint'))
+      )
     ),
-
 
     // equation declaration
 
+    equation_keyword: $ => prec(9, choice(
+      token.immediate(caseInsensitive('equation')),
+      token.immediate(caseInsensitive('equations'))
+    )),
+
     equation_declaration: $ => seq(
-      choice(
-        caseInsensitive('equation'),
-        caseInsensitive('equations')
-      ),
+      $.equation_keyword,
       commaOrNewlineSep1($.eq_entry),
       ';'
     ),
@@ -230,24 +329,131 @@ module.exports = grammar({
     eq_attr_assignment: $ => seq(
       $.index_atom,
       token.immediate('.'),        // no space between element and dot attribute
-      $.eq_attr,
+      $.variable_attribute_keyword,
       field('value', $.number)
     ),
 
-    eq_attr: $ => token(/(up|lo|l|m|scale)/i),
+    // tables
     
-    // instantiation
+    // Expressions
 
+    expression: $ =>choice(
+      $.number,
+      $.string,
+      $.indexed_reference,
+      $.paren_expr,
+      $.unary_expr,
+      $.binary_expr,
+      // $.call_expr,
+      $.conditional_expr,
+      $.identifier,
+      // $.sum_expr,
+      // $.prod_expr
+    ),
 
+    paren_expr: $ => seq('(', $.expression, ')'),
+
+    unary_expr: $ => prec(100, seq(choice('+', '-', caseInsensitive('not')), $.expression)),
+
+    binary_operator_keyword : $ => choice(
+      token('+'), token('-'), token('*'), token('/'), token('**'),
+      token('>'), token('<'), token('>='), token('<='), 
+      token(caseInsensitive('and')), token(caseInsensitive('or')),
+      token(caseInsensitive('gt')), token(caseInsensitive('lt')),
+      token(caseInsensitive('ge')), token(caseInsensitive('le'))
+    ),
+
+    binary_expr: $ => prec.left(1, seq(
+      $.expression,
+      $.binary_operator_keyword,
+      $.expression
+    )),
+
+    call_expr: $ => prec.dynamic(0, seq(
+      $.identifier,
+      token.immediate('('),
+      optional(commaSep1($.expression)),
+      ')'
+    )),
+
+    conditional_expr: $ => prec.left(1, seq(
+      $.expression,
+      '$',
+      $.expression
+    )),
+
+    // call_expr: $ => seq(
+    //   caseInsensitive('sum', 'prod', 'smin', 'smax'),
+    //   token.immediate('('),
+    //   commaSep1($.index_spec),
+    //   ',',
+    //   $.expression,
+    //   ')'
+    // ),
+
+    // prod_expr: $ => seq(
+    //   caseInsensitive('prod'),
+    //   token.immediate('('),
+    //   commaSep1($.index_spec),
+    //   ',',
+    //   $.expression,
+    //   ')'
+    // ),
+
+    // index_spec: $ => choice(
+    //   $.identifier_with_domain, // i(j)
+    //   $.indexed_reference,
+    //   $.identifier, // i
+    // ),
+
+    // Assignments
+
+    assignment_statement: $ =>
+      prec(1,
+        seq(
+          field(
+            "left_hand_side",
+            choice(
+              $.indexed_reference,
+              $.identifier, // i
+            )
+          ),
+          optional(
+            field("condition",
+              prec(2,
+                seq(
+                  '$',
+                  $.expression
+                )
+              )
+            )
+          ),
+          '=',
+          field("right_hand_side",
+            $.expression,
+          ),
+          ';'
+        )
+    ),
+
+    // lvalue: $ => choice(
+    //   $.identifier,
+    //   $.identifier_with_domain,
+    //   $.indexed_reference
+    // ),
 
     // loops
 
-  }
+  },
+  // conflicts: $ => [
+    // [$.identifier_with_domain_args, $.indexed_reference_args]
+  // ]
 });
 
 // separate one or more term by comma or newline
 function commaOrNewlineSep1(rule) {
-  return seq(rule, 
+  return seq(
+    rule, 
     repeat(
       seq(
         choice(',', /\r?\n/),
