@@ -25,11 +25,17 @@ idem add table format for Equation
 
 - [ ] add loops
 
-- [ ] in expression add sum, prod ...
+- [x] in expression add sum, prod ...
 
-- [ ] Keywords ? sum, ifthen ...
+- [ ] Keywords ? ifthen ...
+
+- [ ] Other buildin operators: abs, ord, mod 
 
 - [ ] add equation assignment
+
+- [ ] add model declaration
+
+- [ ] acronym statements
 
 - [ ] add display
 

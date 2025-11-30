@@ -27,9 +27,18 @@ calar1 = 100;
 param1(j) = 2*cc(j);
 # param2(i,j) $ (i.j mod 2 = 0) = 1.5*param1(i);
 
-# Nested functions in indices
-kk(sum(l) $ condition(l)) = ll(l) + 5;
-mm(prod(i) $ (i.val > 0)) = nn(i)*10;
+# Indexed operators
+kk(l) $ condition(l) = ll(l) + 5 + sum(l2 $ is_prime(l2), b(l2));
+mm(prod(i) $ (i.val > 0)) = nn(i)*10 + sum(l2 $ is_prime(l2), b(l2));
+d(i) = sum(j, b(i,j));
+c    = sum(i, a(i));
+d(i) = sum(j$(ord(j) <= 2), b(i,j));
+c = sum(i, sum(j, b(i,j)));
+c = prod(i, a(i));
+c = smax(i, a(i));
+c = smin(i, a(i));
+d(i) = smax(j, b(i,j));
+e(i,j)$(a(i) > 2 and ord(j) = 1) = b(i,j);
 
 # Assignments with complex expressions
 pp(j) = qq(j) + rr(j)*2 - ss(j)/3 + tt(j)**2;

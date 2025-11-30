@@ -26,6 +26,7 @@ module.exports = grammar({
 
     _statement: $ => choice(
       $.alias_declaration,
+      // prec(2, $.loop_statement),
       prec(1, $.assignment_statement),
 
       // other
@@ -82,27 +83,24 @@ module.exports = grammar({
 
     indexed_reference_args: $ =>
       seq(
-        choice(
+        $.index_element,
+        optional(
+          prec(2, repeat(
+            seq(
+            ',',
+            $.index_element
+          )
+        )))
+      ),
+    
+    index_element: $ =>
+      choice(
           $.string,
           seq($.identifier, '*', $.identifier),
           seq($.number, '*', $.number),
           $.identifier_with_domain,
           $.identifier
         ),
-        optional(
-          prec(2, repeat(
-            seq(
-            ',',
-            choice(
-              $.string,
-              seq($.identifier, '*', $.identifier),
-              seq($.number, '*', $.number),
-              $.identifier_with_domain,
-             $.identifier,
-            )
-          )
-        )))
-      ),
 
     variable_attribute_keyword: $ => 
       choice(
@@ -114,7 +112,6 @@ module.exports = grammar({
         token.immediate(caseInsensitive('m')),
       ),
       
-
     number: $ => /[+-]?(?:\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/,
 
     comment: $ => token(seq('#', /.*/)),
@@ -171,7 +168,7 @@ module.exports = grammar({
 
 
     alias_declaration: $ => seq(
-      caseInsensitive('alias'),
+      $.alias_keyword,
       '(',
       commaSep1($.identifier), // aliases
       ')',
@@ -344,6 +341,7 @@ module.exports = grammar({
       $.paren_expr,
       $.unary_expr,
       $.binary_expr,
+      $.indexed_operation, 
       // $.call_expr,
       $.conditional_expr,
       $.identifier,
@@ -369,12 +367,48 @@ module.exports = grammar({
       $.expression
     )),
 
-    call_expr: $ => prec.dynamic(0, seq(
-      $.identifier,
+    indexed_operation_keyword: $ => choice(
+      token('sum'), token('prod'), token('smin'), 
+      token('smax'), token('sand'), token('sor')
+    ),
+
+    indexed_operation: $ => seq(
+      $.indexed_operation_keyword,
       token.immediate('('),
-      optional(commaSep1($.expression)),
-      ')'
-    )),
+      $.index_element,
+      optional(
+        seq(
+          '$',
+          $.expression
+        )
+      ),
+      token(','),
+      $.expression,
+      token(')')
+    ),
+
+    index_list: $ =>
+      choice(
+        $.index_element,
+        seq(
+          token('('),
+          $.index_element,
+          optional(
+              seq(
+                ',',
+                $.index_element
+              )
+            ),
+          token(')')
+          )
+        ),
+
+    // call_expr: $ => prec.dynamic(0, seq(
+    //   $.identifier,
+    //   token.immediate('('),
+    //   optional(commaSep1($.expression)),
+    //   ')'
+    // )),
 
     conditional_expr: $ => prec.left(1, seq(
       $.expression,
