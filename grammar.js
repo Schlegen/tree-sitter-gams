@@ -11,27 +11,31 @@ module.exports = grammar({
   rules: {
     source_file: $ => repeat(
       choice(
-        $._declaration,
         $._statement
       )
     ),
 
-    _declaration: $ => choice(
+    _statement: $ => prec(30,
+      seq(
+        $._statement_without_semicolon,
+        ';'
+      )
+    ),
+
+    _statement_without_semicolon: $ => choice(
+      prec(20, $.loop_statement),
+
       prec(10, $.set_declaration),
       prec(9, $.parameter_declaration),
       prec(9, $.scalar_declaration),
       prec(9, $.variable_declaration),
       prec(9, $.equation_declaration),
-    ),
-
-    _statement: $ => choice(
+  
       $.alias_declaration,
-      // prec(2, $.loop_statement),
       prec(1, $.assignment_statement),
 
       // other
       $.comment,
-      // $.string
     ),
 
     // utils
@@ -97,6 +101,7 @@ module.exports = grammar({
       choice(
           $.string,
           seq($.identifier, '*', $.identifier),
+          seq($.identifier, '+', $.number),
           seq($.number, '*', $.number),
           $.identifier_with_domain,
           $.identifier
@@ -130,9 +135,8 @@ module.exports = grammar({
 
     set_declaration: $ => prec(10, seq(
       $.set_keyword,
-      commaOrNewlineSep1($.set_entry),
-      ';'
-    )
+      commaOrNewlineSep1($.set_entry)
+      )
     ),
 
     set_entry: $ => seq(
@@ -171,8 +175,7 @@ module.exports = grammar({
       $.alias_keyword,
       '(',
       commaSep1($.identifier), // aliases
-      ')',
-      ';'
+      ')'
     ),
 
     scalar_keyword: $ => prec(9, choice(
@@ -183,8 +186,7 @@ module.exports = grammar({
     // scalar declaration
     scalar_declaration: $ => seq(
       $.scalar_keyword,
-      commaOrNewlineSep1($.scalar_entry),
-      ';'
+      commaOrNewlineSep1($.scalar_entry)
     ),
 
     scalar_entry: $ => seq(
@@ -204,15 +206,14 @@ module.exports = grammar({
     parameter_keyword: $ => prec(10,
       choice(
         token.immediate(caseInsensitive('parameter')),
-        token.immediate(caseInsensitive('parameters')),
+        token.immediate(caseInsensitive('parameters'))
       )
     ),
 
     parameter_declaration: $ =>
       seq(
         $.parameter_keyword,
-        commaOrNewlineSep1($.param_entry),
-        ';'
+        commaOrNewlineSep1($.param_entry)
       ),
 
     param_entry: $ => seq(
@@ -245,8 +246,7 @@ module.exports = grammar({
     variable_declaration: $ => seq(
       optional($.var_type),
       $.variable_keyword,
-      commaOrNewlineSep1($.var_entry),
-      ';'
+      commaOrNewlineSep1($.var_entry)
     ),
 
     var_entry: $ => seq(
@@ -303,8 +303,7 @@ module.exports = grammar({
 
     equation_declaration: $ => seq(
       $.equation_keyword,
-      commaOrNewlineSep1($.eq_entry),
-      ';'
+      commaOrNewlineSep1($.eq_entry)
     ),
 
     eq_entry: $ => seq(
@@ -344,9 +343,7 @@ module.exports = grammar({
       $.indexed_operation, 
       // $.call_expr,
       $.conditional_expr,
-      $.identifier,
-      // $.sum_expr,
-      // $.prod_expr
+      $.identifier
     ),
 
     paren_expr: $ => seq('(', $.expression, ')'),
@@ -355,10 +352,11 @@ module.exports = grammar({
 
     binary_operator_keyword : $ => choice(
       token('+'), token('-'), token('*'), token('/'), token('**'),
-      token('>'), token('<'), token('>='), token('<='), 
+      token('>'), token('<'), token('>='), token('<='),
       token(caseInsensitive('and')), token(caseInsensitive('or')),
       token(caseInsensitive('gt')), token(caseInsensitive('lt')),
-      token(caseInsensitive('ge')), token(caseInsensitive('le'))
+      token(caseInsensitive('ge')), token(caseInsensitive('le')),
+      token(caseInsensitive('mod'))
     ),
 
     binary_expr: $ => prec.left(1, seq(
@@ -375,7 +373,7 @@ module.exports = grammar({
     indexed_operation: $ => seq(
       $.indexed_operation_keyword,
       token.immediate('('),
-      $.index_element,
+      $.index_list,
       optional(
         seq(
           '$',
@@ -403,42 +401,11 @@ module.exports = grammar({
           )
         ),
 
-    // call_expr: $ => prec.dynamic(0, seq(
-    //   $.identifier,
-    //   token.immediate('('),
-    //   optional(commaSep1($.expression)),
-    //   ')'
-    // )),
-
     conditional_expr: $ => prec.left(1, seq(
       $.expression,
       '$',
       $.expression
     )),
-
-    // call_expr: $ => seq(
-    //   caseInsensitive('sum', 'prod', 'smin', 'smax'),
-    //   token.immediate('('),
-    //   commaSep1($.index_spec),
-    //   ',',
-    //   $.expression,
-    //   ')'
-    // ),
-
-    // prod_expr: $ => seq(
-    //   caseInsensitive('prod'),
-    //   token.immediate('('),
-    //   commaSep1($.index_spec),
-    //   ',',
-    //   $.expression,
-    //   ')'
-    // ),
-
-    // index_spec: $ => choice(
-    //   $.identifier_with_domain, // i(j)
-    //   $.indexed_reference,
-    //   $.identifier, // i
-    // ),
 
     // Assignments
 
@@ -465,19 +432,32 @@ module.exports = grammar({
           '=',
           field("right_hand_side",
             $.expression,
-          ),
-          ';'
+          )
         )
     ),
 
-    // lvalue: $ => choice(
-    //   $.identifier,
-    //   $.identifier_with_domain,
-    //   $.indexed_reference
-    // ),
-
     // loops
+    loop_keyword: $ => token.immediate(caseInsensitive('loop')),
 
+    loop_statement: $ => prec(20,
+      seq(
+        $.loop_keyword,
+        token('('),
+        $.index_list,
+        optional(
+          seq(
+            '$',
+            $.expression
+          )
+        ),
+        token(','),
+        repeat($._statement),
+        optional(
+          $._statement_without_semicolon,
+        ),
+        token(')')
+      )
+    )
   },
   // conflicts: $ => [
     // [$.identifier_with_domain_args, $.indexed_reference_args]

@@ -39,6 +39,14 @@ c = smax(i, a(i));
 c = smin(i, a(i));
 d(i) = smax(j, b(i,j));
 e(i,j)$(a(i) > 2 and ord(j) = 1) = b(i,j);
+c = sum(i, (a(i) + 2)*3 + (sum(j, b(i,j))));
+c = sum((i,j),
+        a(i)
+      + b(i,j)
+      + sum(ii$(ord(ii) < ord(i)), a(ii))
+      );
+c = sum((i,j), a(i) + b(i,j));
+c=sum((i,j),a(i)+b(i,j)+2);
 
 # Assignments with complex expressions
 pp(j) = qq(j) + rr(j)*2 - ss(j)/3 + tt(j)**2;
