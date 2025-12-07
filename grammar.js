@@ -440,7 +440,6 @@ module.exports = grammar({
           'tanh',
           'ceil',
           'floor',
-          'round',
           'sign',
           'sqr',
           'trunc',
@@ -463,7 +462,6 @@ module.exports = grammar({
       prec(4,
         choice(
           'uniform',
-          'round',
           'power',
           'mod'
         )
@@ -495,8 +493,6 @@ module.exports = grammar({
         seq(
           $.multi_args_builtin_function_keyword,
           '(',
-          $.expression,
-          ',',
           $.expression,
           optional(
             repeat(
