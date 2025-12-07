@@ -11,31 +11,32 @@ module.exports = grammar({
   rules: {
     source_file: $ => repeat(
       choice(
-        $._statement
+        $.statement,
+        $.comment
       )
     ),
 
-    _statement: $ => prec(30,
+    statement: $ => prec(30,
       seq(
-        $._statement_without_semicolon,
+        $.statement_without_semicolon,
         ';'
       )
     ),
 
-    _statement_without_semicolon: $ => choice(
-      prec(20, $.loop_statement),
+    statement_without_semicolon: $ => 
+      prec(25,
+        choice(
+          prec(20, $.loop_statement),
 
-      prec(10, $.set_declaration),
-      prec(9, $.parameter_declaration),
-      prec(9, $.scalar_declaration),
-      prec(9, $.variable_declaration),
-      prec(9, $.equation_declaration),
-  
-      $.alias_declaration,
-      prec(1, $.assignment_statement),
-
-      // other
-      $.comment,
+          prec(10, $.set_declaration),
+          prec(9, $.parameter_declaration),
+          prec(9, $.scalar_declaration),
+          prec(9, $.variable_declaration),
+          prec(9, $.equation_declaration),
+      
+          $.alias_declaration,
+          prec(1, $.assignment_statement)
+        )
     ),
 
     // utils
@@ -52,13 +53,13 @@ module.exports = grammar({
 
     identifier_with_domain: $ =>
       prec(3,
-      seq(
-        $.identifier,
-        token.immediate('('),
-        $.identifier_with_domain_args,
-        ')'
-      )
-   ),
+        seq(
+          $.identifier,
+          token.immediate('('),
+          $.identifier_with_domain_args,
+          ')'
+        )
+    ),
 
     identifier_with_domain_args: $ =>
       seq(
@@ -104,7 +105,8 @@ module.exports = grammar({
           seq($.identifier, '+', $.number),
           seq($.number, '*', $.number),
           $.identifier_with_domain,
-          $.identifier
+          $.identifier,
+          $.number
         ),
 
     variable_attribute_keyword: $ => 
@@ -333,18 +335,23 @@ module.exports = grammar({
     
     // Expressions
 
-    expression: $ =>choice(
-      $.number,
-      $.string,
-      $.indexed_reference,
-      $.paren_expr,
-      $.unary_expr,
-      $.binary_expr,
-      $.indexed_operation, 
-      // $.call_expr,
-      $.conditional_expr,
-      $.identifier
-    ),
+    expression: $ => 
+      prec(3,
+        choice(
+          prec.left(5, $.unary_builtin_function_expr),
+          prec.left(4, $.binary_builtin_function_expr),
+          prec.left(3, $.multi_args_builtin_function_expr),
+          prec.left(2, $.number),
+          prec.left(2, $.string),
+          prec.left(2, $.unary_expr),
+          prec.left(2, $.indexed_reference),
+          prec.left(2, $.paren_expr),
+          prec.left(2, $.binary_expr),
+          prec.left(2, $.indexed_operation), 
+        // $.call_expr,
+          $.conditional_expr,
+          prec.left(-1, alias($.identifier, $.bare_identifier)),
+      )),
 
     paren_expr: $ => seq('(', $.expression, ')'),
 
@@ -366,8 +373,8 @@ module.exports = grammar({
     )),
 
     indexed_operation_keyword: $ => choice(
-      token('sum'), token('prod'), token('smin'), 
-      token('smax'), token('sand'), token('sor')
+      'sum', 'prod', 'smin', 
+      'smax', 'sand', 'sor'
     ),
 
     indexed_operation: $ => seq(
@@ -407,6 +414,99 @@ module.exports = grammar({
       $.expression
     )),
 
+    unary_builtin_function_keyword: $ =>
+      prec(5,
+        choice(
+          'abs',
+          'ord',
+          'card',
+          'val',
+          'exp',
+          'log',
+          'log10',
+          'sqrt',
+          'sin',
+          'cos',
+          'tan',
+          'asin',
+          'acos',
+          'arctan',
+          'sinh',
+          'cosh',
+          'tanh',
+          'ceil',
+          'floor',
+          'round',
+          'sign',
+          'sqr',
+          'trunc',
+          'frac'
+        )
+    ),
+
+    unary_builtin_function_expr: $ =>
+      prec(5,
+        seq(
+          $.unary_builtin_function_keyword,
+          '(',
+          $.expression,
+          ')'
+        )
+      ),
+
+
+    binary_builtin_function_keyword: $ =>
+      prec(4,
+        choice(
+          'uniform',
+          'round',
+          'power',
+          'mod'
+        )
+      ),
+
+    binary_builtin_function_expr: $ =>
+      prec(4,
+        seq(
+          $.binary_builtin_function_keyword,
+          '(',
+          $.expression,
+          ',',
+          $.expression,
+          ')'
+        )
+      ),
+
+    multi_args_builtin_function_keyword: $ =>
+      prec(3,
+        choice(
+          'max',
+          'min',
+          'round'
+        )
+      ),
+
+    multi_args_builtin_function_expr: $ =>
+      prec(3,
+        seq(
+          $.multi_args_builtin_function_keyword,
+          '(',
+          $.expression,
+          ',',
+          $.expression,
+          optional(
+            repeat(
+              seq(
+                ',',
+                $.expression
+              )
+            )
+          ),
+          ')'
+        )
+      ),
+    
+
     // Assignments
 
     assignment_statement: $ =>
@@ -431,10 +531,10 @@ module.exports = grammar({
           ),
           '=',
           field("right_hand_side",
-            $.expression,
+            $.expression
           )
         )
-    ),
+      ),
 
     // loops
     loop_keyword: $ => token.immediate(caseInsensitive('loop')),
@@ -451,9 +551,9 @@ module.exports = grammar({
           )
         ),
         token(','),
-        repeat($._statement),
+        repeat($.statement),
         optional(
-          $._statement_without_semicolon,
+          $.statement_without_semicolon,
         ),
         token(')')
       )

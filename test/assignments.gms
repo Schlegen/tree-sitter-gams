@@ -55,6 +55,37 @@ pp(j) = qq(j) + rr(j)*2 - ss(j)/3 + tt(j)**2;
 uu("some_key") = 42;
 vv("another_key") = uu("some_key") + 3;
 
+# Unary functions
+x = abs(y - 2*z);
+profit = sqrt(revenue(i) - cost(i,j));
+ratio = log10(card(setA) + ord(setB));
+alpha = exp(beta(k) / gamma);
+theta = sin(pi/4) + cos(pi/4);
+delta = round(val(param1) / 3.14159);
+phi = frac(x(i) + y(j));
+omega = sqr(abs(demand(i) - supply(i)));
+zeta = sign(price(i) - cost(i));
+eta = ceil(quantity(i,j) / 2);
+tau = floor((x(i) + y(i)) / 10);
+rho = sinh(abs(paramA(k)));
+sigma = cosh(log(value(j)));
+psi = tanh(exp(-lambda));
+chi = arctan(x(i) / y(i));
+xi = asin(demand(i) / capacity(i));
+nu = acos(cost(i) / revenue(i));
+mu = abs(sin(x(i)) * cos(y(j)));
+
+# Multi-arguments built-in functions
+lambda = uniform(ord(set1), card(set2));
+epsilon = trunc(uniform(0, 1) * 100);
+a = uniform(0, 1);
+b = round(pi, 3);
+c = mod(17, 5);
+d = min(x(i), y(j), z(k));
+e = max(10, 20, 30);
+f = power(2, 8);
+
+
 # Multi-line assignment
 # ww(j) 
 # / 
