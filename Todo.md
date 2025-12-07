@@ -33,9 +33,9 @@ idem add table format for Equation
 
 - [x] add bools ("yes", "no")
 
-- [ ] add ifthenelse control flow
+- [x] add ifthenelse control flow
 
-- [ ] Look for other buildin operators
+- [ ] replace unary_function_expr and binary_function_expr by multi args.
 
 - [ ] add equation assignment
 
@@ -50,3 +50,16 @@ idem add table format for Equation
 - [ ] abort
 
 - [ ] add testbase from all gams examples
+
+```
+solve ml using lp minimizing z;
+if (ml.modelstat = 4,
+     display "model ml was infeasible, relax bounds on x and solve again";
+     x.up(j) = 2*x.up(j) ;
+     solve ml using lp minimizing z ;
+else
+    if (ml.modelstat <> 1,
+        abort "error solving model ml" ;
+    );
+);
+```

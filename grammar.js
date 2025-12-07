@@ -27,6 +27,7 @@ module.exports = grammar({
       prec(25,
         choice(
           prec(20, $.loop_statement),
+          prec(20, $.if_statement),
 
           prec(10, $.set_declaration),
           prec(9, $.parameter_declaration),
@@ -559,6 +560,43 @@ module.exports = grammar({
           $.statement_without_semicolon,
         ),
         token(')')
+      )
+    ),
+
+    // if elseif else control flow
+    if_statement: $ => prec(20,
+      seq(
+        field("if",
+          seq(
+            'if',
+            '(',
+            alias($.expression, $.condition), // logical condition
+            ',',
+            $.statement,
+            repeat($.statement), // one or more statements
+          )
+        ),
+        repeat(
+          field("elseif",
+            seq(
+              'elseif',
+              alias($.expression, $.condition),
+              ',',
+              $.statement,
+              repeat($.statement)
+            )
+          ),
+        ),
+        optional(
+          field("else",
+            seq(
+              'else',
+              $.statement,
+              repeat($.statement)
+            )
+          )
+        ),
+        ')'
       )
     )
   },
