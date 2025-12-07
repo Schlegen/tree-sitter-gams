@@ -6,6 +6,8 @@ a4 = 3.1415;
 a5 = 2e3;
 
 # Parameter assignments with index
+i(i_yes) = yes;
+i(i_no) = no;
 cc(j) = bc(j) + 10;
 dd(j,k) = aa(j)*bb(k);
 

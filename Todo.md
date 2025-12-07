@@ -23,13 +23,21 @@ idem add table format for Equation
 
 - [x] add variables assignment
 
-- [ ] add loops
+- [x] add indexed operators (sum, prod, smax, smin)
+
+- [x] add loops
+
+- [x] add unary expressions : abs, ord, round ... 
+
+- [x] add binary expressions : uniform, mod, round ...
+
+- [x] add bools ("yes", "no")
+
+- [ ] add ifthenelse control flow
 
 - [x] in expression add sum, prod ...
 
-- [ ] Keywords ? ifthen ...
-
-- [ ] Other buildin operators: abs, ord, mod 
+- [ ] Look for other buildin operators
 
 - [ ] add equation assignment
 
@@ -41,4 +49,6 @@ idem add table format for Equation
 
 - [ ] add table
 
-- [ ] more complex indexation ? 
+- [ ] abort
+
+- [ ] add testbase from all gams examples

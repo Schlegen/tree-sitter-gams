@@ -121,6 +121,8 @@ module.exports = grammar({
       
     number: $ => /[+-]?(?:\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/,
 
+    bool: $ => choice('yes', 'no'),
+
     comment: $ => token(seq('#', /.*/)),
 
     string: $ => choice(
@@ -342,6 +344,7 @@ module.exports = grammar({
           prec.left(4, $.binary_builtin_function_expr),
           prec.left(3, $.multi_args_builtin_function_expr),
           prec.left(2, $.number),
+          prec.left(2, $.bool),
           prec.left(2, $.string),
           prec.left(2, $.unary_expr),
           prec.left(2, $.indexed_reference),
