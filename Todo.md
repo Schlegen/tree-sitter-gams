@@ -35,8 +35,6 @@ idem add table format for Equation
 
 - [ ] add ifthenelse control flow
 
-- [x] in expression add sum, prod ...
-
 - [ ] Look for other buildin operators
 
 - [ ] add equation assignment
