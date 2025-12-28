@@ -363,7 +363,7 @@ module.exports = grammar({
 
     binary_operator_keyword : $ => choice(
       token('+'), token('-'), token('*'), token('/'), token('**'),
-      token('>'), token('<'), token('>='), token('<='),
+      token('>'), token('<'), token('>='), token('<='), token('<>'),
       token(caseInsensitive('and')), token(caseInsensitive('or')),
       token(caseInsensitive('gt')), token(caseInsensitive('lt')),
       token(caseInsensitive('ge')), token(caseInsensitive('le')),

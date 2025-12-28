@@ -35,7 +35,13 @@ idem add table format for Equation
 
 - [x] add ifthenelse control flow
 
-- [ ] replace unary_function_expr and binary_function_expr by multi args.
+- [ ] model definition
+
+- [ ] solve model
+
+- [ ] add display
+
+- [ ] abort
 
 - [ ] add equation assignment
 
@@ -43,11 +49,7 @@ idem add table format for Equation
 
 - [ ] acronym statements
 
-- [ ] add display
-
 - [ ] add table
-
-- [ ] abort
 
 - [ ] add testbase from all gams examples
 
