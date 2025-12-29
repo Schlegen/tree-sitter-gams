@@ -36,6 +36,7 @@ module.exports = grammar({
           prec(9, $.equation_declaration),
           prec(9, $.model_declaration),
           prec(9, $.solve_statement),
+          prec(9, $.display_statement),
       
           $.alias_declaration,
           prec(1, $.assignment_statement)
@@ -72,7 +73,6 @@ module.exports = grammar({
         )
       ),
 
-
     indexed_reference: $ => 
       prec(2,
         seq(
@@ -86,6 +86,15 @@ module.exports = grammar({
           token.immediate('('),
           $.indexed_reference_args,
           ')'
+        )
+      ),
+
+    reference: $ => 
+      prec(2,
+        seq(
+          $.identifier,
+          token.immediate('.'),
+          $.variable_attribute_keyword
         )
       ),
 
@@ -397,6 +406,13 @@ module.exports = grammar({
       )
     ),
 
+    // Display statement
+    display_keyword: $ => token.immediate(caseInsensitive('display')),
+
+    display_statement: $ => prec(9, seq($.display_keyword, commaSep1($.display_item))),
+
+    display_item: $ => choice( $.string, $.expression),
+
     // Expressions
 
     expression: $ => 
@@ -412,7 +428,8 @@ module.exports = grammar({
           prec.left(2, $.indexed_reference),
           prec.left(2, $.paren_expr),
           prec.left(2, $.binary_expr),
-          prec.left(2, $.indexed_operation), 
+          prec.left(2, $.indexed_operation),
+          prec.left(1, $.reference),
         // $.call_expr,
           $.conditional_expr,
           prec.left(-1, alias($.identifier, $.bare_identifier)),
@@ -577,6 +594,7 @@ module.exports = grammar({
             "left_hand_side",
             choice(
               $.indexed_reference,
+              $.reference,
               $.identifier, // i
             )
           ),

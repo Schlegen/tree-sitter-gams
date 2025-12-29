@@ -39,9 +39,11 @@ idem add table format for Equation
 
 - [x] solve statement
 
-- [ ] add display
+- [x] add display
 
 - [ ] abort
+
+- [ ] option statement
 
 - [ ] add equation assignment
 
