@@ -37,7 +37,7 @@ idem add table format for Equation
 
 - [x] model definition
 
-- [ ] solve model
+- [x] solve statement
 
 - [ ] add display
 

@@ -35,6 +35,7 @@ module.exports = grammar({
           prec(9, $.variable_declaration),
           prec(9, $.equation_declaration),
           prec(9, $.model_declaration),
+          prec(9, $.solve_statement),
       
           $.alias_declaration,
           prec(1, $.assignment_statement)
@@ -362,6 +363,38 @@ module.exports = grammar({
       $.identifier,               // eqn_name
       $.identifier_with_domain,    // var_name(set_name)
       seq($.identifier, choice('+', '-'), $.identifier)
+    ),
+
+    // Solve statement
+
+    solve_keyword: $ => token.immediate(caseInsensitive('solve')),
+
+    solve_direction: $ => choice(
+      token.immediate(caseInsensitive('maximizing')),
+      token.immediate(caseInsensitive('minimizing'))
+    ),
+
+    solve_statement: $ => prec(9,
+      seq(
+        $.solve_keyword,
+        $.identifier, // model_name
+        choice(
+          // using ... maximizing ...
+          seq(
+            token.immediate(caseInsensitive('using')),
+            $.identifier,
+            $.solve_direction,
+            $.identifier // var_name
+          ),
+          // maximizing ... using ...
+          seq(
+            $.solve_direction,
+            $.identifier,                 // var_name
+            token.immediate(caseInsensitive('using')),
+            $.identifier
+          )
+        )
+      )
     ),
 
     // Expressions
