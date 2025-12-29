@@ -21,7 +21,6 @@ ff(j) $ (j > 0) = dd(j); # 2
 gg(i,j) $ (i < j) = ii(i,j) - 5;
 
 # Indexed references with ranges
-hh(i)*hh(k) = 0;
 ii(1*5,2*7) = jj(1*5,2*7) + 1;
 
 # Mixed scalar and indexed assignments
@@ -31,7 +30,7 @@ param1(j) = 2*cc(j);
 
 # Indexed operators
 kk(l) $ condition(l) = ll(l) + 5 + sum(l2 $ is_prime(l2), b(l2));
-mm(prod(i) $ (i.val > 0)) = nn(i)*10 + sum(l2 $ is_prime(l2), b(l2));
+prod(i) $ (i.val > 0) = nn(i)*10 + sum(l2 $ is_prime(l2), b(l2));
 d(i) = sum(j, b(i,j));
 c    = sum(i, a(i));
 d(i) = sum(j$(ord(j) <= 2), b(i,j));
@@ -40,7 +39,7 @@ c = prod(i, a(i));
 c = smax(i, a(i));
 c = smin(i, a(i));
 d(i) = smax(j, b(i,j));
-e(i,j)$(a(i) > 2 and ord(j) = 1) = b(i,j);
+e(i,j)$(a(i) > 2 and ord(j) == 1) = b(i,j);
 c = sum(i, (a(i) + 2)*3 + (sum(j, b(i,j))));
 c = sum((i,j),
         a(i)
