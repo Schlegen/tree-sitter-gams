@@ -34,6 +34,7 @@ module.exports = grammar({
           prec(9, $.scalar_declaration),
           prec(9, $.variable_declaration),
           prec(9, $.equation_declaration),
+          prec(9, $.model_declaration),
       
           $.alias_declaration,
           prec(1, $.assignment_statement)
@@ -336,6 +337,33 @@ module.exports = grammar({
 
     // tables
     
+
+    // models declaration
+
+    model_declaration: $ => seq( $.model_keyword, 
+      commaOrNewlineSep1($.model_entry)
+    ),
+
+    model_keyword: $ => prec(9, choice(
+      token.immediate(caseInsensitive('model')),
+      token.immediate(caseInsensitive('models'))
+    )),
+
+    model_entry: $ => seq(
+      $.identifier,
+      optional($.string),
+      optional($.model_data_block)
+    ),
+
+    model_data_block: $ => seq( '/', commaOrNewlineSep1($.model_item), '/' ),
+    
+    model_item: $ => choice(
+      token(caseInsensitive('all')) ,
+      $.identifier,               // eqn_name
+      $.identifier_with_domain,    // var_name(set_name)
+      seq($.identifier, choice('+', '-'), $.identifier)
+    ),
+
     // Expressions
 
     expression: $ => 

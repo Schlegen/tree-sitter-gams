@@ -35,7 +35,7 @@ idem add table format for Equation
 
 - [x] add ifthenelse control flow
 
-- [ ] model definition
+- [x] model definition
 
 - [ ] solve model
 
