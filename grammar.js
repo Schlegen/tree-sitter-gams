@@ -78,9 +78,9 @@ module.exports = grammar({
 
     identifier_with_domain_args: $ =>
       seq(
-        $.identifier,
+        choice($.identifier, '*'),
         optional(
-          prec(3, repeat(seq(',', $.identifier)))
+          prec(3, repeat(seq(',', choice($.identifier, '*'))))
         )
       ),
 
@@ -158,6 +158,14 @@ module.exports = grammar({
         token.immediate(caseInsensitive('nodusd')),
         token.immediate(caseInsensitive('numinfes')),
         token.immediate(caseInsensitive('prior')),
+        // model solver control attributes (e.g. fkv.iterlim = 3000)
+        token.immediate(caseInsensitive('iterlim')),
+        token.immediate(caseInsensitive('reslim')),
+        token.immediate(caseInsensitive('optfile')),
+        token.immediate(caseInsensitive('optcr')),
+        token.immediate(caseInsensitive('optca')),
+        token.immediate(caseInsensitive('bratio')),
+        token.immediate(caseInsensitive('trylinear')),
       ),
       
     number: $ => /[+-]?(?:\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/,
@@ -197,15 +205,15 @@ module.exports = grammar({
         '/',
         choice(
           commaOrNewlineSep1($.element_entry),
-          seq($.identifier, '*', $.identifier),
-          seq($.number, '*', $.number) 
+          seq($.set_element, '*', $.set_element),
+          seq($.number, '*', $.number)
         ),
         '/'
     ),
 
     element_entry: $ => seq(
-      $.identifier,
-      optional($.string)           
+      $.set_element,
+      optional($.string)
     ),
 
     // subset
@@ -268,8 +276,8 @@ module.exports = grammar({
       ),
       optional($.string),           // ["text"]
       optional(choice(
-        seq(/\s*\n\s*/, $.param_data_block),  // next-line form: consume newline explicitly
-        $.param_data_block                     // same-line form
+        seq(/\r?\n/, $.param_data_block),  // next-line form: GLR separates this from the \n separator
+        $.param_data_block                  // same-line form
       ))
     ),
 
@@ -893,7 +901,8 @@ module.exports = grammar({
     )
   },
   conflicts: $ => [
-    [$.identifier_with_domain_args, $.index_element]
+    [$.identifier_with_domain_args, $.index_element],
+    [$.param_entry]
   ]
 });
 

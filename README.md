@@ -68,3 +68,21 @@ tree-sitter test --update
 Tree-sitter fills in the expected parse tree from the current parser output. The test is now locked: future grammar changes that alter this tree will cause the test to fail, showing a diff of what changed.
 
 To intentionally accept a changed parse tree (e.g. after a grammar fix), run `--update` again.
+
+## End-to-end tests
+
+`test/e2e/` contains complete, real-world GAMS programs. The runner parses each file and asserts that no `ERROR` or `MISSING` nodes appear in the parse tree:
+
+```sh
+bash test/e2e/run.sh
+```
+
+You can also pass specific files:
+
+```sh
+bash test/e2e/run.sh test/e2e/trnsport.gms
+```
+
+To add a new E2E test, drop a `.gms` file into `test/e2e/` — the runner picks it up automatically. Unlike corpus tests, E2E tests do not lock the tree shape; they only assert a clean parse. Use them for realistic multi-feature programs where locking the full tree would be impractical.
+
+Each file carries a `# Source:` comment at the top with the original URL and a note on what was adapted.

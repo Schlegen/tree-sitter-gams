@@ -39,11 +39,11 @@ alias (c,cp, cpp, cppp);
           (identifier)
           (element_block
             (element_entry
-              (identifier))
+              (set_element))
             (element_entry
-              (identifier))
+              (set_element))
             (element_entry
-              (identifier)))))))
+              (set_element)))))))
   (statement
     (statement_without_semicolon
       (set_declaration
@@ -55,9 +55,9 @@ alias (c,cp, cpp, cppp);
               (identifier)))
           (element_block
             (element_entry
-              (identifier))
+              (set_element))
             (element_entry
-              (identifier)))))))
+              (set_element)))))))
   (statement
     (statement_without_semicolon
       (set_declaration
@@ -76,9 +76,9 @@ alias (c,cp, cpp, cppp);
           (string)
           (element_block
             (element_entry
-              (identifier))
+              (set_element))
             (element_entry
-              (identifier)))))))
+              (set_element)))))))
   (statement
     (statement_without_semicolon
       (set_declaration
@@ -86,13 +86,13 @@ alias (c,cp, cpp, cppp);
         (set_entry
           (identifier)
           (element_block
-            (identifier)
-            (identifier)))
+            (set_element)
+            (set_element)))
         (set_entry
           (identifier)
           (element_block
-            (identifier)
-            (identifier))))))
+            (set_element)
+            (set_element))))))
   (statement
     (statement_without_semicolon
       (set_declaration
