@@ -29,7 +29,7 @@ idem add table format for Equation
 
 - [ ] * line comments (requires external scanner for start-of-line detection)
 - [ ] add testbase from all gams examples
-- [ ] Simplify procedure for unit testing
+- [x] Simplify procedure for unit testing
 - [ ] manage table format def
 
 ```
