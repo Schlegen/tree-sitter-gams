@@ -23,13 +23,17 @@ module.exports = grammar({
       )
     ),
 
-    statement_without_semicolon: $ => 
+    statement_without_semicolon: $ =>
       prec(25,
         choice(
           prec(20, $.loop_statement),
           prec(20, $.if_statement),
+          prec(20, $.for_statement),
+          prec(20, $.while_statement),
+          prec(20, $.repeat_statement),
 
           prec(10, $.set_declaration),
+          prec(10, $.table_declaration),
           prec(9, $.parameter_declaration),
           prec(9, $.scalar_declaration),
           prec(9, $.variable_declaration),
@@ -37,8 +41,14 @@ module.exports = grammar({
           prec(9, $.model_declaration),
           prec(9, $.solve_statement),
           prec(9, $.display_statement),
-      
+          prec(9, $.option_statement),
+          prec(9, $.acronym_declaration),
+
           $.alias_declaration,
+          $.break_statement,
+          $.continue_statement,
+          $.abort_statement,
+          prec(2, $.equation_definition),
           prec(1, $.assignment_statement)
         )
     ),
@@ -121,7 +131,7 @@ module.exports = grammar({
           $.number
         ),
 
-    variable_attribute_keyword: $ => 
+    variable_attribute_keyword: $ =>
       choice(
         token.immediate(caseInsensitive('up')),
         token.immediate(caseInsensitive('lo')),
@@ -129,6 +139,24 @@ module.exports = grammar({
         token.immediate(caseInsensitive('fx')),
         token.immediate(caseInsensitive('scale')),
         token.immediate(caseInsensitive('m')),
+        // equation attributes
+        token.immediate(caseInsensitive('infeas')),
+        token.immediate(caseInsensitive('range')),
+        // set element attributes
+        token.immediate(caseInsensitive('val')),   // numeric value of set element
+        token.immediate(caseInsensitive('tl')),    // text label of set element
+        token.immediate(caseInsensitive('te')),    // element text in legend
+        token.immediate(caseInsensitive('ord')),   // ordinal value (alias for ord() in some contexts)
+        // model solve result attributes (e.g. ml.modelstat)
+        token.immediate(caseInsensitive('modelstat')),
+        token.immediate(caseInsensitive('solvestat')),
+        token.immediate(caseInsensitive('objval')),
+        token.immediate(caseInsensitive('objest')),
+        token.immediate(caseInsensitive('resusd')),
+        token.immediate(caseInsensitive('iterusd')),
+        token.immediate(caseInsensitive('nodusd')),
+        token.immediate(caseInsensitive('numinfes')),
+        token.immediate(caseInsensitive('prior')),
       ),
       
     number: $ => /[+-]?(?:\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/,
@@ -238,7 +266,10 @@ module.exports = grammar({
         $.identifier               // param_name
       ),
       optional($.string),           // ["text"]
-      optional(seq(/\s*\n\s*/, $.param_data_block))           // [/ ... /]
+      optional(choice(
+        seq(/\s*\n\s*/, $.param_data_block),  // next-line form: consume newline explicitly
+        $.param_data_block                     // same-line form
+      ))
     ),
 
     param_data_block: $ => seq(
@@ -250,7 +281,7 @@ module.exports = grammar({
     param_assignment: $ => seq(
       $.index_atom,                 // element or tuple (i1, i1.j1, etc.)
       optional('='),                // optional equals sign
-      field('value', $.number)
+      field('value', choice($.number, $.identifier))  // number or acronym identifier
     ),
 
     // variable declaration
@@ -388,14 +419,13 @@ module.exports = grammar({
         $.solve_keyword,
         $.identifier, // model_name
         choice(
-          // using ... maximizing ...
+          // using solver_type [direction var]  (direction optional for MCP/CNS)
           seq(
             token.immediate(caseInsensitive('using')),
-            $.identifier,
-            $.solve_direction,
-            $.identifier // var_name
+            $.identifier,                // solver_type
+            optional(seq($.solve_direction, $.identifier)) // objective
           ),
-          // maximizing ... using ...
+          // direction var using solver_type
           seq(
             $.solve_direction,
             $.identifier,                 // var_name
@@ -437,14 +467,17 @@ module.exports = grammar({
 
     paren_expr: $ => seq('(', $.expression, ')'),
 
-    unary_expr: $ => prec(100, seq(choice('+', '-', caseInsensitive('not')), $.expression)),
+    unary_expr: $ => prec(100, seq(choice('+', '-', 'not'), $.expression)),
 
     binary_operator_keyword : $ => choice(
       token('+'), token('-'), token('*'), token('/'), token('**'),
       token('>'), token('<'), token('>='), token('<='), token('<>'),
+      token('='),   // equality comparison in conditions (e.g. if / until)
       token(caseInsensitive('and')), token(caseInsensitive('or')),
       token(caseInsensitive('gt')), token(caseInsensitive('lt')),
       token(caseInsensitive('ge')), token(caseInsensitive('le')),
+      token(caseInsensitive('ne')),
+      token(caseInsensitive('eq')),
       token(caseInsensitive('mod'))
     ),
 
@@ -615,6 +648,39 @@ module.exports = grammar({
         )
       ),
 
+    // Equation definitions  (eqn_name(domain)[$cond].. lhs =e= rhs)
+
+    equation_type: $ =>
+      token(choice(
+        /=[eE]=/,   // equality
+        /=[lL]=/,   // less-than-or-equal
+        /=[gG]=/,   // greater-than-or-equal
+        /=[nN]=/,   // non-binding  (free row)
+        /=[xX]=/,   // external    (solver-defined)
+        /=[cC]=/,   // conic
+      )),
+
+    equation_definition: $ =>
+      prec(2,
+        seq(
+          field("name",
+            choice(
+              $.identifier_with_domain,
+              $.identifier,
+            )
+          ),
+          optional(
+            field("condition",
+              seq('$', $.expression)
+            )
+          ),
+          '..',
+          field("left_hand_side",  $.expression),
+          field("type",            $.equation_type),
+          field("right_hand_side", $.expression),
+        )
+      ),
+
     // loops
     loop_keyword: $ => token.immediate(caseInsensitive('loop')),
 
@@ -637,6 +703,145 @@ module.exports = grammar({
         token(')')
       )
     ),
+
+    // for loop: for(scalar = start to|downto end [by step], statements)
+    for_keyword: $ => token.immediate(caseInsensitive('for')),
+
+    for_statement: $ => prec(20,
+      seq(
+        $.for_keyword,
+        '(',
+        $.identifier,
+        '=',
+        $.expression,
+        choice(
+          token(caseInsensitive('downto')),
+          token(caseInsensitive('to'))
+        ),
+        $.expression,
+        optional(seq(token(caseInsensitive('by')), $.expression)),
+        ',',
+        repeat($.statement),
+        optional($.statement_without_semicolon),
+        ')'
+      )
+    ),
+
+    // while loop: while(condition, statements)
+    while_keyword: $ => token.immediate(caseInsensitive('while')),
+
+    while_statement: $ => prec(20,
+      seq(
+        $.while_keyword,
+        '(',
+        alias($.expression, $.condition),
+        ',',
+        repeat($.statement),
+        optional($.statement_without_semicolon),
+        ')'
+      )
+    ),
+
+    // repeat-until loop: repeat(statements until condition)
+    repeat_keyword: $ => token.immediate(caseInsensitive('repeat')),
+    until_keyword: $ => 'until',
+
+    repeat_statement: $ => prec(20,
+      seq(
+        $.repeat_keyword,
+        '(',
+        repeat($.statement),
+        optional($.statement_without_semicolon),
+        $.until_keyword,
+        $.expression,
+        ')'
+      )
+    ),
+
+    // break [n] or break$(cond) [n]
+    break_statement: $ => seq(
+      'break',
+      optional(seq(token.immediate('$'), $.expression)),
+      optional($.number)
+    ),
+
+    // continue or continue$(cond)
+    continue_statement: $ => seq(
+      'continue',
+      optional(seq(token.immediate('$'), $.expression))
+    ),
+
+    // abort ["msg"|id, ...] or abort.noError [...] or abort$(cond) [...]
+    abort_statement: $ => seq(
+      'abort',
+      optional(choice(
+        seq(token.immediate('.'), token.immediate(/[nN][oO][eE][rR][rR][oO][rR]/)),
+        seq(token.immediate('$'), $.expression)
+      )),
+      commaSep1(choice($.string, $.identifier))
+    ),
+
+    // option[s] item, item, ...
+    option_keyword: $ => prec(9, choice(
+      token.immediate(caseInsensitive('option')),
+      token.immediate(caseInsensitive('options'))
+    )),
+
+    option_statement: $ => prec(9,
+      seq($.option_keyword, commaOrNewlineSep1($.option_item))
+    ),
+
+    option_item: $ => choice(
+      // display format: x:decimals[:rows[:cols]]
+      seq($.identifier, token.immediate(':'), $.number,
+          optional(seq(':', $.number, optional(seq(':', $.number))))),
+      // key = value (number or identifier, covers "default" as identifier)
+      seq($.identifier, '=', choice($.number, $.identifier)),
+      // projection: key < identifier
+      seq($.identifier, '<', $.identifier),
+      // flag (bare identifier)
+      $.identifier
+    ),
+
+    // acronym[s] name ["text"], ...
+    acronym_keyword: $ => prec(9, choice(
+      token.immediate(caseInsensitive('acronym')),
+      token.immediate(caseInsensitive('acronyms'))
+    )),
+
+    acronym_declaration: $ => seq(
+      $.acronym_keyword,
+      commaOrNewlineSep1($.acronym_entry)
+    ),
+
+    acronym_entry: $ => seq(
+      $.identifier,
+      optional($.string)
+    ),
+
+    // table declaration: table name(domain) ["text"] body
+    table_keyword: $ => prec(10, choice(
+      token.immediate(caseInsensitive('table')),
+      token.immediate(caseInsensitive('tables'))
+    )),
+
+    table_declaration: $ => prec(10,
+      seq(
+        $.table_keyword,
+        choice($.identifier_with_domain, $.identifier),
+        optional($.string),
+        optional($.table_body)
+      )
+    ),
+
+    // Table body: flat sequence of cells (identifiers, set elements, numbers)
+    // Tree-sitter can't do column-aligned parsing, so we treat it as a token stream
+    table_body: $ => repeat1($.table_cell),
+
+    table_cell: $ => token(choice(
+      /[+-]?(?:\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/,
+      /[a-zA-Z_][a-zA-Z0-9_\-\.]*/
+    )),
 
     // if elseif else control flow
     if_statement: $ => prec(20,
@@ -675,9 +880,9 @@ module.exports = grammar({
       )
     )
   },
-  // conflicts: $ => [
-    // [$.identifier_with_domain_args, $.indexed_reference_args]
-  // ]
+  conflicts: $ => [
+    [$.identifier_with_domain_args, $.index_element]
+  ]
 });
 
 // separate one or more term by comma or newline

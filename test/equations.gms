@@ -11,4 +11,4 @@ Equations
 #    b                   20 ;
 
 Equations  obj ;
-# obj.. phi  =e=  phipsi + philam + phipi - phieps ;
+obj.. phi  =e=  phipsi + philam + phipi - phieps ;

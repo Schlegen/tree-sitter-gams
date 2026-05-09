@@ -2,7 +2,7 @@
 Parameter demand(i) /i1 100, i2 150, i3 200/;
 
 # Scalar declaration
-Scalar alpha /scaling factor/;
+Scalar alpha 'scaling factor';
 
 # * Equation declaration
 # Equation cost_equation(i) 'total cost equation'; # a COMMENT

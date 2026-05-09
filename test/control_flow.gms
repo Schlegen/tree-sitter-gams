@@ -16,19 +16,19 @@ loop(i$(curacc > reltol),
        curacc     =  abs (value(i+1)-value(i))/(1+abs(value(i+1)))
 ) ;
 
-* Simple if
+# Simple if
 if (x > 0,
     y = 1;
 );
 
-* If with else
+# If with else
 if (demand(i) > supply(i),
     shortage(i) = demand(i) - supply(i);
 else
     shortage(i) = 0;
 );
 
-* If with elseif
+# If with elseif
 if (round(price,2) > 100,
     category = 'expensive';
 elseif round(price,2) > 50,
@@ -37,7 +37,7 @@ else
     category = 'cheap';
 );
 
-* Nested statements inside if
+# Nested statements inside if
 if (abs(x) > 10,
     y = sqrt(x);
     z = log(x);

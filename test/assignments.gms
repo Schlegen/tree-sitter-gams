@@ -39,7 +39,7 @@ c = prod(i, a(i));
 c = smax(i, a(i));
 c = smin(i, a(i));
 d(i) = smax(j, b(i,j));
-e(i,j)$(a(i) > 2 and ord(j) == 1) = b(i,j);
+e(i,j)$(a(i) > 2 and ord(j) = 1) = b(i,j);
 c = sum(i, (a(i) + 2)*3 + (sum(j, b(i,j))));
 c = sum((i,j),
         a(i)
