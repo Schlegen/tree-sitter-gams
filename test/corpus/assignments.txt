@@ -1,0 +1,1477 @@
+================================================================================
+Simple scalar assignments
+================================================================================
+
+a1 = 10;
+a2 = 5;
+a3 = -7.5;
+a4 = 3.1415;
+a5 = 2e3;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (number))))))
+
+================================================================================
+Parameter assignments with index
+================================================================================
+
+i(i_yes) = yes;
+i(i_no) = no;
+cc(j) = bc(j) + 10;
+dd(j,k) = aa(j)*bb(k);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (bool)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (bool)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (binary_expr
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier)))))
+            (binary_operator_keyword)
+            (expression
+              (number)))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))
+            (index_element
+              (identifier))))
+        (expression
+          (binary_expr
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier)))))
+            (binary_operator_keyword)
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier)))))))))))
+
+================================================================================
+String indices
+================================================================================
+
+cc("j1") = 1;
+ee("region1","year2025") = 1000;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (string))))
+        (expression
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (string))
+            (index_element
+              (string))))
+        (expression
+          (number))))))
+
+================================================================================
+Conditional assignments
+================================================================================
+
+cc(is_valid(j)) $ is_prime(j) = bc(j) + 10;
+ff(j) $ (j > 0) = dd(j); # 2
+gg(i,j) $ (i < j) = ii(i,j) - 5;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier_with_domain
+                (identifier)
+                (identifier_with_domain_args
+                  (identifier))))))
+        (expression
+          (indexed_reference
+            (identifier)
+            (indexed_reference_args
+              (index_element
+                (identifier)))))
+        (expression
+          (binary_expr
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier)))))
+            (binary_operator_keyword)
+            (expression
+              (number)))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (paren_expr
+            (expression
+              (binary_expr
+                (expression
+                  (bare_identifier))
+                (binary_operator_keyword)
+                (expression
+                  (number))))))
+        (expression
+          (indexed_reference
+            (identifier)
+            (indexed_reference_args
+              (index_element
+                (identifier))))))))
+  (comment)
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))
+            (index_element
+              (identifier))))
+        (expression
+          (paren_expr
+            (expression
+              (binary_expr
+                (expression
+                  (bare_identifier))
+                (binary_operator_keyword)
+                (expression
+                  (bare_identifier))))))
+        (expression
+          (binary_expr
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))
+                  (index_element
+                    (identifier)))))
+            (binary_operator_keyword)
+            (expression
+              (number))))))))
+
+================================================================================
+Indexed references with ranges
+================================================================================
+
+ii(1*5,2*7) = jj(1*5,2*7) + 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (number)
+              (number))
+            (index_element
+              (number)
+              (number))))
+        (expression
+          (binary_expr
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (number)
+                    (number))
+                  (index_element
+                    (number)
+                    (number)))))
+            (binary_operator_keyword)
+            (expression
+              (number))))))))
+
+================================================================================
+Mixed scalar and indexed assignments
+================================================================================
+
+calar1 = 100;
+param1(j) = 2*cc(j);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (binary_expr
+            (expression
+              (number))
+            (binary_operator_keyword)
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier)))))))))))
+
+================================================================================
+Indexed operators
+================================================================================
+
+kk(l) $ condition(l) = ll(l) + 5 + sum(l2 $ is_prime(l2), b(l2));
+prod(i) $ (i.val > 0) = nn(i)*10 + sum(l2 $ is_prime(l2), b(l2));
+d(i) = sum(j, b(i,j));
+c    = sum(i, a(i));
+d(i) = sum(j$(ord(j) <= 2), b(i,j));
+c = sum(i, sum(j, b(i,j)));
+c = prod(i, a(i));
+c = smax(i, a(i));
+c = smin(i, a(i));
+d(i) = smax(j, b(i,j));
+e(i,j)$(a(i) > 2 and ord(j) = 1) = b(i,j);
+c = sum(i, (a(i) + 2)*3 + (sum(j, b(i,j))));
+c = sum((i,j),
+        a(i)
+      + b(i,j)
+      + sum(ii$(ord(ii) < ord(i)), a(ii))
+      );
+c = sum((i,j), a(i) + b(i,j));
+c=sum((i,j),a(i)+b(i,j)+2);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (indexed_reference
+            (identifier)
+            (indexed_reference_args
+              (index_element
+                (identifier)))))
+        (expression
+          (binary_expr
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (number))))
+            (binary_operator_keyword)
+            (expression
+              (indexed_operation
+                (indexed_operation_keyword)
+                (index_list
+                  (index_element
+                    (identifier)))
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (paren_expr
+            (expression
+              (binary_expr
+                (expression
+                  (reference
+                    (identifier)
+                    (variable_attribute_keyword)))
+                (binary_operator_keyword)
+                (expression
+                  (number))))))
+        (expression
+          (binary_expr
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (number))))
+            (binary_operator_keyword)
+            (expression
+              (indexed_operation
+                (indexed_operation_keyword)
+                (index_list
+                  (index_element
+                    (identifier)))
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))
+                  (index_element
+                    (identifier))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (paren_expr
+                (expression
+                  (binary_expr
+                    (expression
+                      (unary_builtin_function_expr
+                        (unary_builtin_function_keyword)
+                        (expression
+                          (bare_identifier))))
+                    (binary_operator_keyword)
+                    (expression
+                      (number))))))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))
+                  (index_element
+                    (identifier))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (indexed_operation
+                (indexed_operation_keyword)
+                (index_list
+                  (index_element
+                    (identifier)))
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))
+                  (index_element
+                    (identifier))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))
+            (index_element
+              (identifier))))
+        (expression
+          (paren_expr
+            (expression
+              (binary_expr
+                (expression
+                  (binary_expr
+                    (expression
+                      (binary_expr
+                        (expression
+                          (indexed_reference
+                            (identifier)
+                            (indexed_reference_args
+                              (index_element
+                                (identifier)))))
+                        (binary_operator_keyword)
+                        (expression
+                          (number))))
+                    (binary_operator_keyword)
+                    (expression
+                      (unary_builtin_function_expr
+                        (unary_builtin_function_keyword)
+                        (expression
+                          (bare_identifier))))))
+                (binary_operator_keyword)
+                (expression
+                  (number))))))
+        (expression
+          (indexed_reference
+            (identifier)
+            (indexed_reference_args
+              (index_element
+                (identifier))
+              (index_element
+                (identifier))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier)))
+            (expression
+              (binary_expr
+                (expression
+                  (binary_expr
+                    (expression
+                      (paren_expr
+                        (expression
+                          (binary_expr
+                            (expression
+                              (indexed_reference
+                                (identifier)
+                                (indexed_reference_args
+                                  (index_element
+                                    (identifier)))))
+                            (binary_operator_keyword)
+                            (expression
+                              (number))))))
+                    (binary_operator_keyword)
+                    (expression
+                      (number))))
+                (binary_operator_keyword)
+                (expression
+                  (paren_expr
+                    (expression
+                      (indexed_operation
+                        (indexed_operation_keyword)
+                        (index_list
+                          (index_element
+                            (identifier)))
+                        (expression
+                          (indexed_reference
+                            (identifier)
+                            (indexed_reference_args
+                              (index_element
+                                (identifier))
+                              (index_element
+                                (identifier))))))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier))
+              (index_element
+                (identifier)))
+            (expression
+              (binary_expr
+                (expression
+                  (binary_expr
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier)))))
+                    (binary_operator_keyword)
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier))
+                          (index_element
+                            (identifier)))))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_operation
+                    (indexed_operation_keyword)
+                    (index_list
+                      (index_element
+                        (identifier)))
+                    (expression
+                      (paren_expr
+                        (expression
+                          (binary_expr
+                            (expression
+                              (unary_builtin_function_expr
+                                (unary_builtin_function_keyword)
+                                (expression
+                                  (bare_identifier))))
+                            (binary_operator_keyword)
+                            (expression
+                              (unary_builtin_function_expr
+                                (unary_builtin_function_keyword)
+                                (expression
+                                  (bare_identifier))))))))
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier))))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier))
+              (index_element
+                (identifier)))
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (indexed_operation
+            (indexed_operation_keyword)
+            (index_list
+              (index_element
+                (identifier))
+              (index_element
+                (identifier)))
+            (expression
+              (binary_expr
+                (expression
+                  (binary_expr
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier)))))
+                    (binary_operator_keyword)
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier))
+                          (index_element
+                            (identifier)))))))
+                (binary_operator_keyword)
+                (expression
+                  (number))))))))))
+
+================================================================================
+Assignments with complex expressions
+================================================================================
+
+pp(j) = qq(j) + rr(j)*2 - ss(j)/3 + tt(j)**2;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (binary_expr
+            (expression
+              (binary_expr
+                (expression
+                  (binary_expr
+                    (expression
+                      (binary_expr
+                        (expression
+                          (binary_expr
+                            (expression
+                              (binary_expr
+                                (expression
+                                  (indexed_reference
+                                    (identifier)
+                                    (indexed_reference_args
+                                      (index_element
+                                        (identifier)))))
+                                (binary_operator_keyword)
+                                (expression
+                                  (indexed_reference
+                                    (identifier)
+                                    (indexed_reference_args
+                                      (index_element
+                                        (identifier)))))))
+                            (binary_operator_keyword)
+                            (expression
+                              (number))))
+                        (binary_operator_keyword)
+                        (expression
+                          (indexed_reference
+                            (identifier)
+                            (indexed_reference_args
+                              (index_element
+                                (identifier)))))))
+                    (binary_operator_keyword)
+                    (expression
+                      (number))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))))
+            (binary_operator_keyword)
+            (expression
+              (number))))))))
+
+================================================================================
+Assignments with immediate strings
+================================================================================
+
+uu("some_key") = 42;
+vv("another_key") = uu("some_key") + 3;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (string))))
+        (expression
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (string))))
+        (expression
+          (binary_expr
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (string)))))
+            (binary_operator_keyword)
+            (expression
+              (number))))))))
+
+================================================================================
+Unary functions
+================================================================================
+
+x = abs(y - 2*z);
+profit = sqrt(revenue(i) - cost(i,j));
+ratio = log10(card(setA) + ord(setB));
+alpha = exp(beta(k) / gamma);
+theta = sin(pi/4) + cos(pi/4);
+delta = round(val(param1) / 3.14159);
+phi = frac(x(i) + y(j));
+omega = sqr(abs(demand(i) - supply(i)));
+zeta = sign(price(i) - cost(i));
+eta = ceil(quantity(i,j) / 2);
+tau = floor((x(i) + y(i)) / 10);
+rho = sinh(abs(paramA(k)));
+sigma = cosh(log(value(j)));
+psi = tanh(exp(-lambda));
+chi = arctan(x(i) / y(i));
+xi = asin(demand(i) / capacity(i));
+nu = acos(cost(i) / revenue(i));
+mu = abs(sin(x(i)) * cos(y(j)));
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (binary_expr
+                    (expression
+                      (bare_identifier))
+                    (binary_operator_keyword)
+                    (expression
+                      (number))))
+                (binary_operator_keyword)
+                (expression
+                  (bare_identifier)))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (unary_builtin_function_expr
+                    (unary_builtin_function_keyword)
+                    (expression
+                      (bare_identifier))))
+                (binary_operator_keyword)
+                (expression
+                  (unary_builtin_function_expr
+                    (unary_builtin_function_keyword)
+                    (expression
+                      (bare_identifier)))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (bare_identifier)))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (binary_expr
+            (expression
+              (unary_builtin_function_expr
+                (unary_builtin_function_keyword)
+                (expression
+                  (binary_expr
+                    (expression
+                      (bare_identifier))
+                    (binary_operator_keyword)
+                    (expression
+                      (number))))))
+            (binary_operator_keyword)
+            (expression
+              (unary_builtin_function_expr
+                (unary_builtin_function_keyword)
+                (expression
+                  (binary_expr
+                    (expression
+                      (bare_identifier))
+                    (binary_operator_keyword)
+                    (expression
+                      (number)))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (multi_args_builtin_function_expr
+            (multi_args_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (unary_builtin_function_expr
+                    (unary_builtin_function_keyword)
+                    (expression
+                      (bare_identifier))))
+                (binary_operator_keyword)
+                (expression
+                  (number)))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (unary_builtin_function_expr
+                (unary_builtin_function_keyword)
+                (expression
+                  (binary_expr
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier)))))
+                    (binary_operator_keyword)
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier))))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (number)))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (paren_expr
+                    (expression
+                      (binary_expr
+                        (expression
+                          (indexed_reference
+                            (identifier)
+                            (indexed_reference_args
+                              (index_element
+                                (identifier)))))
+                        (binary_operator_keyword)
+                        (expression
+                          (indexed_reference
+                            (identifier)
+                            (indexed_reference_args
+                              (index_element
+                                (identifier)))))))))
+                (binary_operator_keyword)
+                (expression
+                  (number)))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (unary_builtin_function_expr
+                (unary_builtin_function_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (unary_builtin_function_expr
+                (unary_builtin_function_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (unary_builtin_function_expr
+                (unary_builtin_function_keyword)
+                (expression
+                  (unary_expr
+                    (expression
+                      (bare_identifier)))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier))))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (unary_builtin_function_expr
+                    (unary_builtin_function_keyword)
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier)))))))
+                (binary_operator_keyword)
+                (expression
+                  (unary_builtin_function_expr
+                    (unary_builtin_function_keyword)
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier)))))))))))))))
+
+================================================================================
+Multi-arguments built-in functions
+================================================================================
+
+lambda = uniform(ord(set1), card(set2));
+epsilon = trunc(uniform(0, 1) * 100);
+a = uniform(0, 1);
+b = round(pi, 3);
+c = mod(17, 5);
+d = min(x(i), y(j), z(k));
+e = max(10, 20, 30);
+f = power(2, 8);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (binary_builtin_function_expr
+            (binary_builtin_function_keyword)
+            (expression
+              (unary_builtin_function_expr
+                (unary_builtin_function_keyword)
+                (expression
+                  (bare_identifier))))
+            (expression
+              (unary_builtin_function_expr
+                (unary_builtin_function_keyword)
+                (expression
+                  (bare_identifier)))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (unary_builtin_function_expr
+            (unary_builtin_function_keyword)
+            (expression
+              (binary_expr
+                (expression
+                  (binary_builtin_function_expr
+                    (binary_builtin_function_keyword)
+                    (expression
+                      (number))
+                    (expression
+                      (number))))
+                (binary_operator_keyword)
+                (expression
+                  (number)))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (binary_builtin_function_expr
+            (binary_builtin_function_keyword)
+            (expression
+              (number))
+            (expression
+              (number)))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (multi_args_builtin_function_expr
+            (multi_args_builtin_function_keyword)
+            (expression
+              (bare_identifier))
+            (expression
+              (number)))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (binary_builtin_function_expr
+            (binary_builtin_function_keyword)
+            (expression
+              (number))
+            (expression
+              (number)))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (multi_args_builtin_function_expr
+            (multi_args_builtin_function_keyword)
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier)))))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier)))))
+            (expression
+              (indexed_reference
+                (identifier)
+                (indexed_reference_args
+                  (index_element
+                    (identifier))))))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (multi_args_builtin_function_expr
+            (multi_args_builtin_function_keyword)
+            (expression
+              (number))
+            (expression
+              (number))
+            (expression
+              (number)))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (identifier)
+        (expression
+          (binary_builtin_function_expr
+            (binary_builtin_function_keyword)
+            (expression
+              (number))
+            (expression
+              (number))))))))

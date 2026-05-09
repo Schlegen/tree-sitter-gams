@@ -1,0 +1,80 @@
+================================================================================
+Abort statements
+================================================================================
+
+abort "this model has infeasibilities";
+
+abort$(target <= 0) "argument must be positive";
+
+abort$(p > 3) "parameter too large", p;
+
+abort.noError "stopping early for inspection", x;
+
+loop(i,
+    abort$(p(i) > 3) "Parameter larger than 3", p;
+);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (abort_statement
+        (string))))
+  (statement
+    (statement_without_semicolon
+      (abort_statement
+        (expression
+          (paren_expr
+            (expression
+              (binary_expr
+                (expression
+                  (bare_identifier))
+                (binary_operator_keyword)
+                (expression
+                  (number))))))
+        (string))))
+  (statement
+    (statement_without_semicolon
+      (abort_statement
+        (expression
+          (paren_expr
+            (expression
+              (binary_expr
+                (expression
+                  (bare_identifier))
+                (binary_operator_keyword)
+                (expression
+                  (number))))))
+        (string)
+        (identifier))))
+  (statement
+    (statement_without_semicolon
+      (abort_statement
+        (string)
+        (identifier))))
+  (statement
+    (statement_without_semicolon
+      (loop_statement
+        (loop_keyword)
+        (index_list
+          (index_element
+            (identifier)))
+        (statement
+          (statement_without_semicolon
+            (abort_statement
+              (expression
+                (paren_expr
+                  (expression
+                    (binary_expr
+                      (expression
+                        (indexed_reference
+                          (identifier)
+                          (indexed_reference_args
+                            (index_element
+                              (identifier)))))
+                      (binary_operator_keyword)
+                      (expression
+                        (number))))))
+              (string)
+              (identifier))))))))

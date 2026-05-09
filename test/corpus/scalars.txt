@@ -1,0 +1,29 @@
+================================================================================
+Scalars_declaration
+================================================================================
+
+Scalar
+    rho  "discount rate"                           / .15 /
+    irr  "internal rate of return"
+    life "financial lifetime of productive units"  / 20  /;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (scalar_declaration
+        (scalar_keyword)
+        (scalar_entry
+          (identifier)
+          (string)
+          (scalar_value_block
+            (number)))
+        (scalar_entry
+          (identifier)
+          (string))
+        (scalar_entry
+          (identifier)
+          (string)
+          (scalar_value_block
+            (number)))))))

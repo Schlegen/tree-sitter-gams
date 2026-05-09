@@ -1,0 +1,108 @@
+================================================================================
+display
+================================================================================
+
+display 'first a simple set', s, 'then a two-dimensional set', st, 'then a parameter', p,
+        'then the activity level of a variable', v.l;
+
+display 'display all values';
+p(s)$(not p(s)) = EPS;
+display p;
+
+display x, y;
+
+display x;
+
+display f ;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (display_statement
+        (display_keyword)
+        (display_item
+          (expression
+            (string)))
+        (display_item
+          (expression
+            (bare_identifier)))
+        (display_item
+          (expression
+            (string)))
+        (display_item
+          (expression
+            (bare_identifier)))
+        (display_item
+          (expression
+            (string)))
+        (display_item
+          (expression
+            (bare_identifier)))
+        (display_item
+          (expression
+            (string)))
+        (display_item
+          (expression
+            (reference
+              (identifier)
+              (variable_attribute_keyword)))))))
+  (statement
+    (statement_without_semicolon
+      (display_statement
+        (display_keyword)
+        (display_item
+          (expression
+            (string))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))))
+        (expression
+          (paren_expr
+            (expression
+              (unary_expr
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (indexed_reference_args
+                      (index_element
+                        (identifier)))))))))
+        (expression
+          (bare_identifier)))))
+  (statement
+    (statement_without_semicolon
+      (display_statement
+        (display_keyword)
+        (display_item
+          (expression
+            (bare_identifier))))))
+  (statement
+    (statement_without_semicolon
+      (display_statement
+        (display_keyword)
+        (display_item
+          (expression
+            (bare_identifier)))
+        (display_item
+          (expression
+            (bare_identifier))))))
+  (statement
+    (statement_without_semicolon
+      (display_statement
+        (display_keyword)
+        (display_item
+          (expression
+            (bare_identifier))))))
+  (statement
+    (statement_without_semicolon
+      (display_statement
+        (display_keyword)
+        (display_item
+          (expression
+            (bare_identifier)))))))

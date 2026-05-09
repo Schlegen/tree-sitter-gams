@@ -1,0 +1,91 @@
+================================================================================
+equations
+================================================================================
+
+Equations
+  tcost_eq                'total cost accounting equation'
+  supply_eq(sl)           'limit on supply available at supply location'
+  capacity_eq(wh)         'warehouse capacity'  /a.scale 50, a.l 10, b.m 20/;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (equation_declaration
+        (equation_keyword)
+        (eq_entry
+          (identifier)
+          (string))
+        (eq_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string))
+        (eq_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (eq_data_block
+            (eq_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (eq_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (eq_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))))))))
+
+================================================================================
+Equation definition with body
+================================================================================
+
+Equations  obj ;
+obj.. phi  =e=  phipsi + philam + phipi - phieps ;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (equation_declaration
+        (equation_keyword)
+        (eq_entry
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (equation_definition
+        (identifier)
+        (expression
+          (bare_identifier))
+        (equation_type)
+        (expression
+          (binary_expr
+            (expression
+              (binary_expr
+                (expression
+                  (binary_expr
+                    (expression
+                      (bare_identifier))
+                    (binary_operator_keyword)
+                    (expression
+                      (bare_identifier))))
+                (binary_operator_keyword)
+                (expression
+                  (bare_identifier))))
+            (binary_operator_keyword)
+            (expression
+              (bare_identifier))))))))

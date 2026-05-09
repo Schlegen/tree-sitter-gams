@@ -1,0 +1,301 @@
+================================================================================
+Variable declaration
+================================================================================
+
+Variables
+   k(t)      'capital stock (trillion rupees)'
+   c(t)      'consumption (trillion rupees per year)'
+   i(t)      'investment (trillion rupees per year)'
+   utility   'utility measure';
+
+Variables
+    u(c,i)  "purchase of domestic materials (mill units per yr)"
+    v(c,j)  "imports            (mill tpy)"
+    e(c,i)  "exports            (mill tpy)"
+    phi     "total cost         (mill us$)"
+    phipsi  "raw material cost  (mill us$)";
+
+Free Variables
+    phi     "total cost         (mill us$)"
+    phipsi  "raw material cost  (mill us$)";
+
+Positive Variables
+    u(c,i)  "purchase of domestic materials (mill units per yr)"
+    v(c,j)  "imports   (mill typ)"
+    e(c,i)  "exports   (mill typ)";
+
+Positive Variables  u, v, e;
+
+Positive Variable x(i) "production level";
+
+Negative Variable y(i) "waste level";
+
+Free Variables z;
+
+Free Variables
+    phi     "total cost         (mill us$)"
+    phipsi  "raw material cost  (mill us$)";
+
+Positive Variables
+    u(c,i)  "purchase of domestic materials (mill units per yr)"
+    v(c,j)  "imports   (mill typ)"
+    e(c,i)  "exports   (mill typ)";
+
+Variable x1(j) "my first"  / j1.up 10 , j1.Lo 5, j1.l 7, j1.m 0, j1.scale 20 /;
+Variable x1(j) "my first"  / j1.UP 10 , j1.LO 5, j1.L 7, j1.M 0, j1.SCALE 20 /;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (variable_keyword)
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier)
+          (string)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (variable_keyword)
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier)
+          (string))
+        (var_entry
+          (identifier)
+          (string)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (var_type)
+        (variable_keyword)
+        (var_entry
+          (identifier)
+          (string))
+        (var_entry
+          (identifier)
+          (string)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (var_type)
+        (variable_keyword)
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (var_type)
+        (variable_keyword)
+        (var_entry
+          (identifier))
+        (var_entry
+          (identifier))
+        (var_entry
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (var_type)
+        (variable_keyword)
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (var_type)
+        (variable_keyword)
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (var_type)
+        (variable_keyword)
+        (var_entry
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (var_type)
+        (variable_keyword)
+        (var_entry
+          (identifier)
+          (string))
+        (var_entry
+          (identifier)
+          (string)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (var_type)
+        (variable_keyword)
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string))
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (string)))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (variable_keyword)
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (var_data_block
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number)))))))
+  (statement
+    (statement_without_semicolon
+      (variable_declaration
+        (variable_keyword)
+        (var_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (var_data_block
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))
+            (var_attr_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (variable_attribute_keyword)
+              (number))))))))

@@ -1,0 +1,73 @@
+================================================================================
+Acronym declarations
+================================================================================
+
+Acronym Monday, Tuesday, Wednesday, Thursday, Friday;
+
+Acronyms local "local market", regional "regional market", national;
+
+Parameter shutdown(machines) /
+    m1  Tuesday
+    m2  Wednesday /;
+
+shutdown('m3') = Friday;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (acronym_declaration
+        (acronym_keyword)
+        (acronym_entry
+          (identifier))
+        (acronym_entry
+          (identifier))
+        (acronym_entry
+          (identifier))
+        (acronym_entry
+          (identifier))
+        (acronym_entry
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (acronym_declaration
+        (acronym_keyword)
+        (acronym_entry
+          (identifier)
+          (string))
+        (acronym_entry
+          (identifier)
+          (string))
+        (acronym_entry
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (parameter_declaration
+        (parameter_keyword)
+        (param_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (param_data_block
+            (param_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (identifier))
+            (param_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (identifier)))))))
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (string))))
+        (expression
+          (bare_identifier))))))

@@ -1,0 +1,122 @@
+================================================================================
+Option statements
+================================================================================
+
+option reslim = 800;
+
+option LP = cplex;
+
+option NLP = default;
+
+option optcr = 0.001;
+
+option limcol = 100;
+
+option reslim = 800, optcr = 0.001, MIP = xpress;
+
+options reslim = 3600
+        optcr = 0.0
+        limrow = 0;
+
+option x:4;
+
+option x:4:2:1;
+
+option clear = x;
+
+option solprint = off;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (number))
+        (option_item
+          (identifier)
+          (number))
+        (option_item
+          (identifier)
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (number))
+        (option_item
+          (identifier)
+          (number))
+        (option_item
+          (identifier)
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (number)
+          (number)
+          (number)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (option_statement
+        (option_keyword)
+        (option_item
+          (identifier)
+          (identifier))))))

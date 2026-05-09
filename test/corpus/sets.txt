@@ -1,0 +1,124 @@
+================================================================================
+Set declaration
+================================================================================
+
+set i;
+
+Set i /i1, i2, i3/;
+
+set i_model(i) /i2, i3/;
+
+set i2;
+
+sets k "set k"
+     k2 'set k2' / element1, element2/;
+
+Set row / row1*row10 /
+    col / col1*col10 /;
+
+Set test /1*10/;
+
+Alias (c, cp) ;
+Alias (cp, c) ;
+alias (c,cp, cpp, cppp);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier)
+          (element_block
+            (element_entry
+              (identifier))
+            (element_entry
+              (identifier))
+            (element_entry
+              (identifier)))))))
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (element_block
+            (element_entry
+              (identifier))
+            (element_entry
+              (identifier)))))))
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier)))))
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier)
+          (string))
+        (set_entry
+          (identifier)
+          (string)
+          (element_block
+            (element_entry
+              (identifier))
+            (element_entry
+              (identifier)))))))
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier)
+          (element_block
+            (identifier)
+            (identifier)))
+        (set_entry
+          (identifier)
+          (element_block
+            (identifier)
+            (identifier))))))
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier)
+          (element_block
+            (number)
+            (number))))))
+  (statement
+    (statement_without_semicolon
+      (alias_declaration
+        (alias_keyword)
+        (identifier)
+        (identifier))))
+  (statement
+    (statement_without_semicolon
+      (alias_declaration
+        (alias_keyword)
+        (identifier)
+        (identifier))))
+  (statement
+    (statement_without_semicolon
+      (alias_declaration
+        (alias_keyword)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)))))
