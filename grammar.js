@@ -32,6 +32,7 @@ module.exports = grammar({
           prec(20, $.while_statement),
           prec(20, $.repeat_statement),
 
+          prec(11, $.variable_table_declaration),
           prec(10, $.set_declaration),
           prec(10, $.table_declaration),
           prec(9, $.parameter_declaration),
@@ -825,6 +826,21 @@ module.exports = grammar({
       token.immediate(caseInsensitive('tables'))
     )),
 
+    // "Variable Table" is a single lexical token to avoid token.immediate issues
+    // across the whitespace between the two keywords.
+    variable_table_keyword: $ => token(seq(
+      caseInsensitive('variable'),
+      /\s+/,
+      caseInsensitive('table')
+    )),
+
+    variable_table_declaration: $ => prec(11, seq(
+      $.variable_table_keyword,
+      choice($.identifier_with_domain, $.identifier),
+      optional($.string),
+      optional($.table_body)
+    )),
+
     table_declaration: $ => prec(10,
       seq(
         $.table_keyword,
@@ -834,14 +850,10 @@ module.exports = grammar({
       )
     ),
 
-    // Table body: flat sequence of cells (identifiers, set elements, numbers)
-    // Tree-sitter can't do column-aligned parsing, so we treat it as a token stream
-    table_body: $ => repeat1($.table_cell),
-
-    table_cell: $ => token(choice(
-      /[+-]?(?:\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/,
-      /[a-zA-Z_][a-zA-Z0-9_\-\.]*/
-    )),
+    // Table body: opaque token consuming everything up to the terminating semicolon.
+    // GAMS table format is column-aligned (not parseable as structured tokens),
+    // and supports dots, spaces, *, +, parentheses in row/column labels.
+    table_body: $ => /[^;]+/,
 
     // if elseif else control flow
     if_statement: $ => prec(20,

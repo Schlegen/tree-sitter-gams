@@ -19,6 +19,74 @@ Table demand(i,j) "demand data"
     prod1  10    20    30    40
     prod2  15    25    35    45 ;
 
+Variable Table x(i,j) initial values
+                            l      m
+    seattle.  new-york      50
+    seattle.  chicago      300
+    san-diego.new-york     275
+    san-diego.chicago           0.009;
+
+Table ka(m,i) "initial cap. of productive units (100 tons per yr)"
+                     inchon      ulsan      yosu
+    atmos-dist         3702      12910      9875
+    steam-cr                       517      1207
+    aromatics                      181       148
+    hydrodeal                      180
+;
+
+Table ka(m,i) "initial cap. of productive units (100 tons per yr)"
+                   inchon    ulsan
+    atmos-dist     3702      12910
+    steam-cr                   517
+    aromatics                  181
+    hydrodeal                  180
+
+        +          yosu
+    atmos-dist     9875
+    steam-cr       1207
+    aromatics       148
+;
+
+Table attrib(ci, cr, q) "blending attributes"
+                          density    sulfur
+    naphtha. mid-c         272        .283
+    naphtha. w-tex         272       1.48
+    dist   . mid-c         292        .526
+    dist   . w-tex         297       2.83
+    gas-oil. mid-c         295        .98
+    gas-oil. w-tex         303       5.05
+;
+
+Table attrib (ci,cr,q) "blending attributes"
+            w-tex.density  mid-c.density  w-tex.sulfur  mid-c.sulfur
+     naphtha      272             272         1.48         .283
+     dist         297             292         2.83         .526
+     gas-oil      303             295         5.05         .98
+;
+
+Table upgrade(strat,size,tech)
+                small.tech1  small.tech2  medium.tech1  medium.tech2
+    strategy-1       .05          .05           .05           .05
+    strategy-2       .2           .2             .2           .2
+    strategy-3       .2           .2             .2           .2
+    strategy-4                                   .2           .2
+
+Table upgradex(strat,size,tech) "alternative way of writing table"
+                                         tech1*tech2
+    strategy-1.(small,medium)                 .05
+    strategy-2*strategy-3.(small,medium)      .2
+    strategy-4.medium                         .2;
+
+
+Table yield (c,t,s,w,z) "crop yield (metric tons per acre)"
+                                                         nwfp     pmw
+    wheat.(bullock, semi-mech).la-plant.
+                                     (heavy, january)   .385     .338
+    wheat.(bullock, semi-mech).la-plant. light          .506     .446
+    wheat.(bullock, semi-mech).la-plant. standard       .592     .524
+    wheat.(bullock, semi-mech).(qk-harv, standard).
+                                     (heavy, january)   .439     .387;
+
 --------------------------------------------------------------------------------
 
 (source_file
@@ -26,75 +94,125 @@ Table demand(i,j) "demand data"
     (statement_without_semicolon
       (table_declaration
         (table_keyword)
-        (identifier_with_domain
-          (identifier)
-          (identifier_with_domain_args
-            (identifier)
-            (identifier)))
-        (string)
-        (table_body
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)))))
+        (identifier)
+        (table_body))))
   (statement
     (statement_without_semicolon
       (table_declaration
         (table_keyword)
-        (identifier_with_domain
-          (identifier)
-          (identifier_with_domain_args
-            (identifier)
-            (identifier)
-            (identifier)))
-        (string)
-        (table_body
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)))))
+        (identifier)
+        (table_body))))
   (statement
     (statement_without_semicolon
       (table_declaration
         (table_keyword)
-        (identifier_with_domain
-          (identifier)
-          (identifier_with_domain_args
-            (identifier)
-            (identifier))))))
+        (identifier)
+        (table_body))))
   (statement
     (statement_without_semicolon
       (table_declaration
         (table_keyword)
-        (identifier_with_domain
-          (identifier)
-          (identifier_with_domain_args
-            (identifier)
-            (identifier)))
-        (string)
-        (table_body
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell)
-          (table_cell))))))
+        (identifier)
+        (table_body))))
+  (statement
+    (statement_without_semicolon
+      (variable_table_declaration
+        (variable_table_keyword)
+        (identifier)
+        (table_body))))
+  (statement
+    (statement_without_semicolon
+      (table_declaration
+        (table_keyword)
+        (identifier)
+        (table_body))))
+  (statement
+    (statement_without_semicolon
+      (table_declaration
+        (table_keyword)
+        (identifier)
+        (table_body))))
+  (statement
+    (statement_without_semicolon
+      (table_declaration
+        (table_keyword)
+        (identifier)
+        (table_body))))
+  (statement
+    (statement_without_semicolon
+      (table_declaration
+        (table_keyword)
+        (identifier)
+        (table_body))))
+  (statement
+    (statement_without_semicolon
+      (table_declaration
+        (table_keyword)
+        (identifier)
+        (table_body))))
+  (statement
+    (statement_without_semicolon
+      (table_declaration
+        (table_keyword)
+        (identifier)
+        (table_body)))))
+
+================================================================================
+Table with negative values
+================================================================================
+
+Table profit(product, month) "profit data"
+               january  february  march
+    product-a    100       -50     200
+    product-b   -200       150    -100
+;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (table_declaration
+        (table_keyword)
+        (identifier)
+        (table_body)))))
+
+================================================================================
+Table with scientific notation values
+================================================================================
+
+Table react(i,j) "reaction rates"
+           low      mid      high
+    slow  1.5e-3   2.0e-3   3.0E-3
+    fast  1.5e2    2.0e2    3.0E2
+;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (table_declaration
+        (table_keyword)
+        (identifier)
+        (table_body)))))
+
+================================================================================
+Variable Table with attribute columns and quoted description
+================================================================================
+
+Variable Table x(i,j) "variable initial values"
+                      .l    .m    .lo   .up
+    seattle.new-york   50    0     0    500
+    seattle.chicago   300    0     0    500
+;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (variable_table_declaration
+        (variable_table_keyword)
+        (identifier)
+        (table_body)))))
