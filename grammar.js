@@ -188,7 +188,7 @@ module.exports = grammar({
 
     set_declaration: $ => prec(10, seq(
       $.set_keyword,
-      commaOrNewlineSep1($.set_entry)
+      commaOrNewlineSep1Trailing($.set_entry)
       )
     ),
 
@@ -213,9 +213,13 @@ module.exports = grammar({
         '/'
     ),
 
-    element_entry: $ => seq(
-      $.set_element,
-      optional($.string)
+    element_entry: $ => choice(
+      // plain element with optional description string
+      seq($.set_element, optional($.string)),
+      // parent.child  (single child, no parens)
+      seq($.set_element, '.', $.set_element, optional($.string)),
+      // parent.(child1, child2, ...)  (multiple children)
+      seq($.set_element, '.', '(', commaSep1($.set_element), ')', optional($.string)),
     ),
 
     // subset
@@ -241,7 +245,7 @@ module.exports = grammar({
     // scalar declaration
     scalar_declaration: $ => seq(
       $.scalar_keyword,
-      commaOrNewlineSep1($.scalar_entry)
+      commaOrNewlineSep1Trailing($.scalar_entry)
     ),
 
     scalar_entry: $ => seq(
@@ -268,7 +272,7 @@ module.exports = grammar({
     parameter_declaration: $ =>
       seq(
         $.parameter_keyword,
-        commaOrNewlineSep1($.param_entry)
+        commaOrNewlineSep1Trailing($.param_entry)
       ),
 
     param_entry: $ => seq(
@@ -304,7 +308,7 @@ module.exports = grammar({
     variable_declaration: $ => seq(
       optional($.var_type),
       $.variable_keyword,
-      commaOrNewlineSep1($.var_entry)
+      commaOrNewlineSep1Trailing($.var_entry)
     ),
 
     var_entry: $ => seq(
@@ -361,7 +365,7 @@ module.exports = grammar({
 
     equation_declaration: $ => seq(
       $.equation_keyword,
-      commaOrNewlineSep1($.eq_entry)
+      commaOrNewlineSep1Trailing($.eq_entry)
     ),
 
     eq_entry: $ => seq(
@@ -393,7 +397,7 @@ module.exports = grammar({
     // models declaration
 
     model_declaration: $ => seq( $.model_keyword, 
-      commaOrNewlineSep1($.model_entry)
+      commaOrNewlineSep1Trailing($.model_entry)
     ),
 
     model_keyword: $ => prec(9, choice(
@@ -793,7 +797,7 @@ module.exports = grammar({
     )),
 
     option_statement: $ => prec(9,
-      seq($.option_keyword, commaOrNewlineSep1($.option_item))
+      seq($.option_keyword, commaOrNewlineSep1Trailing($.option_item))
     ),
 
     option_item: $ => choice(
@@ -816,7 +820,7 @@ module.exports = grammar({
 
     acronym_declaration: $ => seq(
       $.acronym_keyword,
-      commaOrNewlineSep1($.acronym_entry)
+      commaOrNewlineSep1Trailing($.acronym_entry)
     ),
 
     acronym_entry: $ => seq(

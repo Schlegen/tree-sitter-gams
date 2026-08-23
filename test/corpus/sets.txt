@@ -298,3 +298,99 @@ set jreal(j) 'Real Energy Technologies' /
               (set_element))
             (element_entry
               (set_element))))))))
+
+================================================================================
+Set element dot-notation single child
+================================================================================
+
+set map_j(j,jj) /
+    en.el
+    el.elcoal
+/;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (element_block
+            (element_entry
+              (set_element)
+              (set_element))
+            (element_entry
+              (set_element)
+              (set_element))))))))
+
+================================================================================
+Set element dot-notation multiple children
+================================================================================
+
+set map_j(j,jj) /
+    en.(el, nel)
+    el.(elcoal, eloil, elgas)
+/;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (element_block
+            (element_entry
+              (set_element)
+              (set_element)
+              (set_element))
+            (element_entry
+              (set_element)
+              (set_element)
+              (set_element)
+              (set_element))))))))
+
+================================================================================
+Set element dot-notation mixed with plain entries
+================================================================================
+
+set map_j(j,jj) /
+    en.(el, nel)
+    elpc_new
+    elpc_old
+/;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)
+              (identifier)))
+          (element_block
+            (element_entry
+              (set_element)
+              (set_element)
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))))))))
