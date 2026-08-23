@@ -122,3 +122,179 @@ alias (c,cp, cpp, cppp);
         (identifier)
         (identifier)
         (identifier)))))
+
+================================================================================
+Empty set element blocks
+================================================================================
+
+set fuel_own_qfuel(fuel) / /;
+set fuel       'All energy carriers' / oil, coal, gas, uranium /
+    f(fuel)    'Primary energy sources' / oil, coal, gas, uranium /
+    s(fuel)    'Secondary energy sources' / /
+    extract(f) 'Primary energy fuels with an extraction sector' / /
+    f_mkt(f)   'Fuel markets' / oil /
+    fuel_own_qfuel(fuel) / /;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (element_block)))))
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier)
+          (string)
+          (element_block
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))))
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (element_block
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))))
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (element_block))
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (element_block))
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (element_block
+            (element_entry
+              (set_element))))
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (element_block))))))
+
+================================================================================
+Multi-line set element blocks
+================================================================================
+
+set ssp 'Shared Socioeconomic Pathway baseline scenarios' /
+    ssp1 'Sustainability - Taking the Green Road'
+    ssp2 'Middle of the Road'
+    ssp3 'Regional Rivalry - A Rocky Road'
+    ssp4 'Inequality - A Road Divided'
+    ssp5 'Fossil-fueled Development - Taking the Highway'
+/;
+
+set jreal(j) 'Real Energy Technologies' /
+    elpc_new, elpc_old, elpc_ccs, elpc_oxy, elcigcc,
+    elnuclear_old, elnuclear_new,
+    eloil_new, eloil_old,
+    elgastr_new, elgastr_old, elgasccs,
+    neloil,
+    nelgas,
+    nelcoal
+/;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier)
+          (string)
+          (element_block
+            (element_entry
+              (set_element)
+              (string))
+            (element_entry
+              (set_element)
+              (string))
+            (element_entry
+              (set_element)
+              (string))
+            (element_entry
+              (set_element)
+              (string))
+            (element_entry
+              (set_element)
+              (string)))))))
+  (statement
+    (statement_without_semicolon
+      (set_declaration
+        (set_keyword)
+        (set_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (element_block
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))
+            (element_entry
+              (set_element))))))))

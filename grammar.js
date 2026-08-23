@@ -203,10 +203,12 @@ module.exports = grammar({
 
     element_block: $ => seq(
         '/',
-        choice(
-          commaOrNewlineSep1($.element_entry),
-          seq($.set_element, '*', $.set_element),
-          seq($.number, '*', $.number)
+        optional(
+          choice(
+            commaOrNewlineSep1Trailing($.element_entry),
+            seq($.set_element, '*', $.set_element),
+            seq($.number, '*', $.number)
+          )
         ),
         '/'
     ),
@@ -909,12 +911,21 @@ module.exports = grammar({
 // separate one or more term by comma or newline
 function commaOrNewlineSep1(rule) {
   return seq(
-    rule, 
+    rule,
     repeat(
       seq(
         choice(',', /\r?\n/),
         rule)
       )
+  );
+}
+
+// same as commaOrNewlineSep1, but also allows a trailing comma or newline
+// after the last term (e.g. a trailing comma before a closing '/')
+function commaOrNewlineSep1Trailing(rule) {
+  return seq(
+    commaOrNewlineSep1(rule),
+    optional(choice(',', /\r?\n/))
   );
 }
 
