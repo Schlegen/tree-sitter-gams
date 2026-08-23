@@ -208,3 +208,31 @@ Parameter
                 (set_element_selection
                   (set_element)))
               (number))))))))
+
+================================================================================
+Parameter with closing slash on its own line
+================================================================================
+
+Parameter tfpn_corr_ssp_param(ssp) 'Factor by wich growth rate of SSP2 tfpn adjusted'/
+ssp5    1.012
+/;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (parameter_declaration
+        (parameter_keyword)
+        (param_entry
+          (identifier_with_domain
+            (identifier)
+            (identifier_with_domain_args
+              (identifier)))
+          (string)
+          (param_data_block
+            (param_assignment
+              (index_atom
+                (set_element_selection
+                  (set_element)))
+              (number))))))))

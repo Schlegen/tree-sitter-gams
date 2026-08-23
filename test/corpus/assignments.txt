@@ -1475,3 +1475,106 @@ f = power(2, 8);
               (number))
             (expression
               (number))))))))
+
+================================================================================
+Sum over a 3-element parenthesized domain
+================================================================================
+
+allerr(run,siter,'pes') = 100 * sum((t,f,n)$(tcheck(t)), abs(COST_FUEL.l(f,t,n)-LAST_COST_FUEL.l(f,t,n))) / sum((t,n)$(tcheck(t)),Q.l('CC',t,n));
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (statement_without_semicolon
+      (assignment_statement
+        (indexed_reference
+          (identifier)
+          (indexed_reference_args
+            (index_element
+              (identifier))
+            (index_element
+              (identifier))
+            (index_element
+              (string))))
+        (expression
+          (binary_expr
+            (expression
+              (binary_expr
+                (expression
+                  (number))
+                (binary_operator_keyword)
+                (expression
+                  (indexed_operation
+                    (indexed_operation_keyword)
+                    (index_list
+                      (index_element
+                        (identifier))
+                      (index_element
+                        (identifier))
+                      (index_element
+                        (identifier)))
+                    (expression
+                      (paren_expr
+                        (expression
+                          (indexed_reference
+                            (identifier)
+                            (indexed_reference_args
+                              (index_element
+                                (identifier)))))))
+                    (expression
+                      (unary_builtin_function_expr
+                        (unary_builtin_function_keyword)
+                        (expression
+                          (binary_expr
+                            (expression
+                              (indexed_reference
+                                (identifier)
+                                (variable_attribute_keyword)
+                                (indexed_reference_args
+                                  (index_element
+                                    (identifier))
+                                  (index_element
+                                    (identifier))
+                                  (index_element
+                                    (identifier)))))
+                            (binary_operator_keyword)
+                            (expression
+                              (indexed_reference
+                                (identifier)
+                                (variable_attribute_keyword)
+                                (indexed_reference_args
+                                  (index_element
+                                    (identifier))
+                                  (index_element
+                                    (identifier))
+                                  (index_element
+                                    (identifier)))))))))))))
+            (binary_operator_keyword)
+            (expression
+              (indexed_operation
+                (indexed_operation_keyword)
+                (index_list
+                  (index_element
+                    (identifier))
+                  (index_element
+                    (identifier)))
+                (expression
+                  (paren_expr
+                    (expression
+                      (indexed_reference
+                        (identifier)
+                        (indexed_reference_args
+                          (index_element
+                            (identifier)))))))
+                (expression
+                  (indexed_reference
+                    (identifier)
+                    (variable_attribute_keyword)
+                    (indexed_reference_args
+                      (index_element
+                        (string))
+                      (index_element
+                        (identifier))
+                      (index_element
+                        (identifier)))))))))))))

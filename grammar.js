@@ -285,7 +285,7 @@ module.exports = grammar({
 
     param_data_block: $ => seq(
       '/',
-      commaOrNewlineSep1($.param_assignment),
+      commaOrNewlineSep1Trailing($.param_assignment),
       '/'
     ),
 
@@ -318,7 +318,7 @@ module.exports = grammar({
 
     var_data_block: $ => seq(
       '/',
-      commaOrNewlineSep1($.var_attr_assignment),
+      commaOrNewlineSep1Trailing($.var_attr_assignment),
       '/'
     ),
 
@@ -375,7 +375,7 @@ module.exports = grammar({
 
     eq_data_block: $ => seq(
       '/',
-      commaOrNewlineSep1($.eq_attr_assignment),
+      commaOrNewlineSep1Trailing($.eq_attr_assignment),
       '/'
     ),
 
@@ -407,7 +407,7 @@ module.exports = grammar({
       optional($.model_data_block)
     ),
 
-    model_data_block: $ => seq( '/', commaOrNewlineSep1($.model_item), '/' ),
+    model_data_block: $ => seq( '/', commaOrNewlineSep1Trailing($.model_item), '/' ),
     
     model_item: $ => choice(
       token(caseInsensitive('all')) ,
@@ -523,13 +523,7 @@ module.exports = grammar({
         $.index_element,
         seq(
           token('('),
-          $.index_element,
-          optional(
-              seq(
-                ',',
-                $.index_element
-              )
-            ),
+          commaSep1($.index_element),
           token(')')
           )
         ),
